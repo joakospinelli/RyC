@@ -116,7 +116,7 @@ Los códigos de retorno indican el estado de la respuesta y si se pudo realizar 
 
 
 # 13) Utilizando curl, realice un requerimiento con el método HEAD al sitio www.redes.unlp.edu.ar e indique:
-<img src="https://github.com/joakospinelli/RyC/blob/main/screenshots/Practica%202/ej13.jpg"/>
+<img src=".\screenshots\Practica 2\ej13.jpg"/>
 
 ## a. ¿Qué información brinda la primer línea de la respuesta?
 Indica la versión de HTTP de la respuesta (HTTP 1.1) y el código de estado (200 OK).
@@ -135,7 +135,7 @@ El 13/04/2022 a las 22:55 GMT.
 
 ## f. Solicite la página nuevamente con curl usando GET, pero esta vez indique que quiere obtenerla sólo si la misma fue modificada en una fecha posterior a la que efectivamente fue modificada. ¿Cómo lo hace? ¿Qué resultado obtuvo? ¿Puede explicar para qué sirve?
 
-<img src="https://github.com/joakospinelli/RyC/blob/main/screenshots/Practica%202/ej13.jpg"/>
+<img src="https://github.com/joakospinelli/RyC/blob/main/screenshots/Practica%202/ej13f.jpg"/>
 
 Agregando el header "`If-Modified-Since:(fecha)`" al comando CURL podemos obtener una respuesta dependiendo si el archivo fue modificado antes o después de la fecha pasada.
 
@@ -147,21 +147,27 @@ Usando este Header podemos saber si un servidor acepta validación según la fec
 # 14) Utilizando curl, acceda al sitio www.redes.unlp.edu.ar/restringido/index.php y siga las instrucciones y las pistas que vaya recibiendo hasta obtener la respuesta final. Será de utilidad para resolver este ejercicio poder analizar tanto el contenido de cada página como los encabezados.
 
 Primer acceso
+
 <img src="screenshots\Practica 2\ej14-1.jpg"/>
 
 Segundo acceso
+
 <img src="screenshots\Practica 2\ej14-2.jpg"/>
 
 Tercer acceso (Agrego header `Usuario-Redes` al CURL)
+
 <img src="screenshots\Practica 2\ej14-3.jpg"/>
 
 Cuarto acceso (Agrego header `Authorization` con Base64)
+
 <img src="screenshots\Practica 2\ej14-4.jpg"/>
 
 Quinto acceso (Encuentro la siguiente página en los headers de la respuesta)
+
 <img src="screenshots\Practica 2\ej14-5.jpg"/>
 
 Último acceso
+
 <img src="screenshots\Practica 2\ej14-6.jpg"/>
 
 # 15) 
