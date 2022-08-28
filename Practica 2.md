@@ -137,10 +137,10 @@ El 13/04/2022 a las 22:55 GMT.
 
 <img src="https://github.com/joakospinelli/RyC/blob/main/screenshots/Practica%202/ej13f.jpg"/>
 
-Agregando el header "`If-Modified-Since:(fecha)`" al comando CURL podemos obtener una respuesta dependiendo si el archivo fue modificado antes o después de la fecha pasada.
+Agregando el header `If-Modified-Since:(fecha)` al comando CURL podemos obtener una respuesta dependiendo si el archivo fue modificado antes o después de la fecha del header. Es menor-estricto.
 
 * Si le pasamos una fecha anterior a la última fecha de modificación, obtenemos la misma respuesta.
-* Si le pasamos una fecha posterior, obtenemos una respuesta con el estado **304 Not Modified**.
+* Si le pasamos una fecha igual o posterior, obtenemos una respuesta con el estado **304 Not Modified**.
 
 Usando este Header podemos saber si un servidor acepta validación según la fecha de modificación.
 
@@ -170,10 +170,163 @@ Quinto acceso (Encuentro la siguiente página en los headers de la respuesta)
 
 <img src="screenshots\Practica 2\ej14-6.jpg"/>
 
-# 15) 
+# 15) Utilizando la VM, realice la siguientes pruebas:
+
+## a. Ejecute el comando `curl www.redes.unlp.edu.ar/extras/prueba-http-1-0.txt` y copie la salida completa (incluyendo los dos saltos de linea del final).
+
+<img src='./screenshots/Practica 2/ej15.jpg'>
+
+## b. Desde la consola ejecute el comando `telnet www.redes.unlp.edu.ar 80` y luego pegue el contenido que tiene almacenado en el portapapeles. ¿Qué ocurre luego de hacerlo?
+
+Recibe una respuesta del servidor con los encabezados:
 
 
+| HTTP/1.1 200 OK |
+| --- |
+**Date:** Sun, 28 Aug 2022 17:32:23 GMT
+**Server:** Apache/2.4.53 (Unix)
+**Last-Modified:** Wed, 13 Apr 2022 22:55:32 GMT
+**ETag:** "760-5dc9113140100"
+**Accept-Ranges:** bytes
+**Content-Length:** 1888
+**Connection:** close
+**Content-Type:** text/html
+
+Y la respuesta es un archivo HTML completo muy grande así que no lo voy a subir todo pero lo importante es que dice
+
+    <h1>Ejemplo del protocolo HTTP 1.1</h1>
+    <p>
+        Esta página se visualiza utilizando HTTP 1.1. Utilizando el capturador de paquetes analice cuantos flujos utiliza el navegador para visualizar la página con sus imágenes en contraposición con el protocolo HTTP/1.0.
+    </p>
+    </p>
+    <h2>Imagen de ejemplo</h2>
+    <img src="13532-tuxkiller03green.png" width="800px"/>
+    </div> 
+    
+    
+    </div>
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Redes y Comunicaciones</p>
+      </div>
+    </div>
+
+## c. Repita el proceso anterior, pero copiando la salida del recurso `/extras/prueba-http-1-1.txt`. Verifique que debería poder pegar varias veces el mismo contenido sin tener que ejecutar telnet nuevamente.
+
+El recurso retorna:
+
+<img src='./screenshots/Practica 2/ej15c.jpg'>
+
+Al ejecutar `telnet` la respuesta es la misma, pero permite copiar varias veces el contenido (y enviarlo) hasta que se cierra la conexión.
+
+# 16) En base a lo obtenido en el ejercicio anterior, responda:
+
+## a. ¿Qué está haciendo al ejecutar el comando `telnet`?
+El comando telnet es una herramienta que sirve para emular una terminal manejada por el protocolo TELNET. Permite el envío y recepción de datos de un servidor remoto usando este protocolo.
+
+## b. ¿Qué método HTTP utilizó?  ¿Qué recurso solicitó?
+En ambos casos usó el método GET y recibió como recurso el archivo HTTP de la página Web.
+
+## c. ¿Qué diferencias notó entre los dos casos? ¿Puede explicar por qué?
+La única diferencia es que cuando se establece la conexión de HTTP 1.0 se cierra automáticamente, mientras que al conectarse con HTTP 1.1 la conexión persiste un tiempo más y permite volver a enviarle contenido mientras dure.
+
+Esto se debe a que en HTTP 1.1 se implementó una característica que implementa conexiones persistentes para hacer múltiples requests. En la versión anterior (HTTP 1.0) las conexiones se cerraban instantáneamente.
+
+## d. ¿Cuál de los dos casos le parece más eficiente? Piense en el ejercicio donde analizó la cantidad de requerimientos necesarios para obtener una página con estilos, javascripts e imágenes. El caso elegido, ¿puede traer asociado algún problema?
+El problema de HTTP 1.0 es que un cliente no podía realizar peticiones consecutivas, por lo que debía esperar a poder volver conectarse con el servidor. Esto producía problemas de eficiencia, especialmente al intentar cargas páginas Web con varios recursos (como la del ejercicio); si el servidor tuviese muchas solicitudes que atender, podría demorarse mucho en volver a atender a la del cliente.
+
+Gracias a las conexiones persistentes de HTTP 1.1, cuando un cliente se conecta con el servidor puede realizar peticiones adicionales inmediatamente, dentro de la misma conexión. Esto permite que obtenga todos los recursos adicionales que necesita, sin liberar al servidor y tener que reconectarse con él.
+
+# 17) En el siguiente ejercicio veremos la diferencia entre los métodos POST y GET. Para ello, será necesario utilizar la VM y la herramienta Wireshark.
+
+## a. Abra un navegador e ingrese a la URL: www.redes.unlp.edu.ar e ingrese al link en la sección “Capa de Aplicación” llamado “Métodos HTTP”. En la página mostrada se visualizan dos nuevos links llamados: Método GET y Método POST.
+
+## b. Analice el código HTML.
+Si inspeccionamos el HTML de ambas páginas vemos que los formularios son prácticamente iguales; lo único que cambia es el método (GET y POST respectivamente). Incluso ambos apuntan hacia la misma acción `metodos-lectura-valores.php`, aunque el servidor los va a tratar de distinta manera puesto que tienen distinto método.
+
+## c. Utilizando el analizador de paquetes Wireshark capture los paquetes enviados y recibidos al presionar el botón Enviar.
+
+### En el método GET:
+**Petición:**
+
+<img src='./screenshots/Practica 2/ej17c-get1.jpg'>
+
+Los valores de los campos del formulario no están en el cuerpo de la petición, sino que aparecen en la URL: 
+
+`form_nombre=Joaqu%C3%ADn&form_apellido=Spinelli&
+form_mail=email_prueba%40gmail.com&form_sexo=sexo_masc& form_pass=12345`
+
+**Respuesta:**
+
+<img src='./screenshots/Practica 2/ej17c-get2.jpg'>
+
+Y en el cuerpo de la respuesta está el archivo HTML.
 
 
+### En el método POST:
+**Petición:**
 
+<img src='./screenshots/Practica 2/ej17c-post1.jpg'>
 
+Los valores de los campos del formulario se encuentran en el cuerpo de la petición, en un apartado especial para formularios HTML
+
+<img src='./screenshots/Practica 2/ej17c-post2.jpg'>
+
+**Respuesta:**
+
+<img src='./screenshots/Practica 2/ej17c-post3.jpg'>
+
+La respuesta es la misma que con el método GET (también devuelve la página HTML en el cuerpo)
+
+# 18) Investigue cuál es el principal uso que se le da a las cabeceras Set-Cookie y Cookie en HTTP y qué relación tienen con el funcionamiento del protocolo HTTP.
+
+La cabecera `Set-Cookie` se usa para enviar cookies desde el servidor al User Agent, para que pueda agregarlas como encabezado en futuros mensajes al servidor.
+
+La cabecera `Cookie` contiene los cookies que el User Agent desea enviar al servidor en un mensaje.
+
+Ambas funcionan en conjunto, puesto que el User Agent recibe las cookies mediante `Set-Cookie` y luego puede enviarlas al servidor mediante `Cookie`.
+
+En HTTP las cookies son datos que el cliente recibe del servidor y luego las agrega en las nuevas peticiones que envía. Pueden usarse para múltiples propósitos, pero los más comunes son para gestionar sesiones de usuario, personalizar configuraciones o rastrear comportamientos de usuario.
+
+Como HTTP es un protocolo sin estado (es decir, no guarda información de comunicaciones previas), las cookies permiten que el servidor "recuerde" información del estado del cliente con el que se está comunicando. Esto permite, por ejemplo, mantener abiertas las sesiones de usuario o cargar una página Web con las preferencias que seleccionó previamente, incluso después de haber cerrado la página o el navegador.
+
+# 19) ¿Cuál es la diferencia entre un protocolo binario y uno basado en texto? ¿de que tipo de protocolo se trata HTTP/1.0, HTTP/1.1 y HTTP/2?
+Los protocolos en binarios utilizan un conjunto estandarizado de caracteres de control para enviar datos codificados en binario en una comunicación. Están pensados para ser leídos por máquinas, por lo que cada una debe tener herramientas para interpretarlos.
+
+Los protocolos basados en texto usan caracteres ASCII y están formados por cadenas de texto pensadas en un formato para ser legibles por humanos. Debido a este formato legible, las máquinas suelen tener problemas para intepretarlos, tales como los espacios en blanco, capitalización, caracteres de final de línea, etc.
+
+Los protocolos binarios son más eficientes para interpretar, más compactos al ser transportados, y son mucho menos propenso a errores.
+
+Los protocolos basado en texto son usados por HTTP/1.0 y HTTP/1.1, mientras que HTTP/2 usa protocolo binario.
+
+# 20) Analice de que se tratan las siguientes características de HTTP/2: stream, frame, server-push
+
+- **Frame:** unidad mínima de comunicación. Contienen un header que identifican al stream al cual pertenecen. Llevan tipos de datos específicos, tales como headers, carga útil, etc.
+- **Stream:** secuencias de frames independientes y bidireccionales, que se intercambian entre el cliente y el servidor a lo largo de una conexión. Una única conexión puede tener varios streams activos, y el nodo destino los procesará en el orden de envío.
+- **Server-push:** es un servicio basado en estimaciones y predicciones. Sirve para que el servidor envíe información al usuario antes de que él la solicite, para que cuando lo haga esté disponible inmediatamente. Funciona enviando múltiples respuestas a una única petición.
+
+# 21) Responder las siguientes preguntas:
+## a. ¿Qué función cumple la cabecera Host en HTTP 1.1? ¿Existía en HTTP 1.0? ¿Qué sucede en HTTP/2?
+El header `Host` se usa para especificar el nombre del dominio al que el cliente quiere hacer la petición. Opcionalmente puede agregarse el número de puerto al que se referencia.
+
+En conexiones HTTP 1.0 no era requerido, pero podía agregarse opcionalmente; en HTTP 1.1 es obligatorio que todas las comunicaciones lo tengan especificado.
+
+En HTTP 2 se dividió en varios pseudo-headers:
+- `Method`: Método de la petición.
+- `Path`: Path al que se realiza la peticicón.
+- `Scheme`: el esquema al que se realiza la petición (HTTP o HTTPS)
+- `Authority`: contiene la porción de autoridad de la URI del servidor.
+
+## b. ¿Cómo quedaría en HTTP/2 el siguiente pedido realizado en HTTP/1.1 si se está usando https?
+
+```html
+GET /index.php HTTP/1.1
+Host: www.info.unlp.edu.ar
+```
+
+```html
+:method | GET
+:scheme | https
+:authority | www.info.unlp.edu.ar
+:path | index.php
+```
