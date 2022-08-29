@@ -104,7 +104,11 @@ En la respuesta:
 "Date" indica la fecha y hora en la que se realizó la petición.
 
 # 11) En HTTP/1.0, ¿cómo sabe el cliente que ya recibió todo el objeto solicitado completamente? ¿Y en HTTP/1.1?
-??????
+En HTTP/1.0 la conexión permanecerá hasta obtener el objeto completo.
+
+En HTTP/1.1, si bien no se puede saber si el objeto se recibió completamente, hay algunos encabezados que pueden indicarlo:
+* **Content-Length**: indica el tamaño total del objeto. Podemos usarlo para comparar con el tamaño del objeto actual.
+* **Connection**: indica si la conexión se cerró totalmente o si es persistente. Si la conexión está cerrada es porque el objeto se recibió completamente.
 
 # 12)  Investigue los distintos tipos de códigos de retorno de un servidor web y su significado. Considere que los mismos se clasifican en categorías (2XX, 3XX, 4XX, 5XX).
 Los códigos de retorno indican el estado de la respuesta y si se pudo realizar la petición correctamente. Todos los códigos tienen un número entre 100 y 500, y se dividen de la siguiente manera:
@@ -311,11 +315,10 @@ El header `Host` se usa para especificar el nombre del dominio al que el cliente
 
 En conexiones HTTP 1.0 no era requerido, pero podía agregarse opcionalmente; en HTTP 1.1 es obligatorio que todas las comunicaciones lo tengan especificado.
 
-En HTTP 2 se dividió en varios pseudo-headers:
+En HTTP/2 se reemplazó por el header `Authority`, que cumple una función similar. También se agregaron algunos pseudo-headers:
 - `Method`: Método de la petición.
 - `Path`: Path al que se realiza la peticicón.
 - `Scheme`: el esquema al que se realiza la petición (HTTP o HTTPS)
-- `Authority`: contiene la porción de autoridad de la URI del servidor.
 
 ## b. ¿Cómo quedaría en HTTP/2 el siguiente pedido realizado en HTTP/1.1 si se está usando https?
 
