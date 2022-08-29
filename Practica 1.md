@@ -9,9 +9,9 @@ Uno de los principales servicios de Internet y el que produció su éxito (World
 Está formada por varios protocolos de comunicación; entre los más conocidos están HTTP (para la transferencia mediante WWW), SMTP (para correos electrónicos), FTP y P2P (para transferencia de archivos), entre otros.
 
 Los componentes que forman Internet son:
-* <strong>Clientes:</strong> dispositivos de los que se conectan los usuarios finales. Incluyen las aplicaciones mediante las que se realizan las peticiones a los servidores (por ejemplo, navegadores Web)
-* <strong>Servidores:</strong> equipos cargados con programas que ofrecen servicios a los clientes. Estos captan las solicitudes que se les realizan y brindan una respuesta adecuada. Puede haber varios clientes consultando a un único servidor, pero la respuesta siempre se realiza a un único cliente.
-* <strong>Proveedores de internet:</strong> generalmente son empresas que le brindan el servicio de Internet a los usuarios finales. Estas empresas se encargan de establecer los nodos que conectan a todas las computadoras entre sí.
+* **Clientes:** dispositivos de los que se conectan los usuarios finales. Incluyen las aplicaciones mediante las que se realizan las peticiones a los servidores (por ejemplo, navegadores Web)
+* **Servidores:** equipos cargados con programas que ofrecen servicios a los clientes. Estos captan las solicitudes que se les realizan y brindan una respuesta adecuada. Puede haber varios clientes consultando a un único servidor, pero la respuesta siempre se realiza a un único cliente.
+* **Proveedores de internet:** generalmente son empresas que le brindan el servicio de Internet a los usuarios finales. Estas empresas se encargan de establecer los nodos que conectan a todas las computadoras entre sí.
 
 # 3) ¿Qué son las RFC?
 RFC son una serie de publicaciones por ingenieros de Internet para describir el funcionamiento de Internet y otro tipo de redes de computadoras. Incluye una serie de normas o estándares para hacer protocolos de red que puedan ser usados e interpretados por distintos tipos de sistemas, independientemente de su Sistema Operativo.
@@ -30,14 +30,14 @@ Gracias a esta estandarización, mientras dos máquinas reconozcan los protocolo
 
 # 6) ¿Cuáles son las 2 categorías en las que pueden clasificarse a los sistemas finales o End Systems? Dé unejemplo del rol de cada uno en alguna aplicación distribuida que corra sobre Internet.
 Los sistemas finales de una red pueden ser:
-* <strong>Clientes:</strong> sistemas que solicitan servicios a los servidores y esperan una respuesta de ellos.
-* <strong>Servidores:</strong> sistemas que esperan solicitudes de servicios por parte de los clientes para recibirlas, procesarlas y responderlas.
+* **Clientes:** sistemas que solicitan servicios a los servidores y esperan una respuesta de ellos.
+* **Servidores:** sistemas que esperan solicitudes de servicios por parte de los clientes para recibirlas, procesarlas y responderlas.
 
 Un ejemplo de esto en una arquitectura distribuida serían las páginas Web. El cliente estaría representado por el navegador, que solicita la página para mostrarla al usuario. El servidor está representado por el servidor Web en sí, que es el encargado de recibir las peticiones del navegador y retornar los valores que se soliciten.
 
 # 7) ¿Cuál es la diferencia entre una red conmutada de paquetes de una red conmutada de circuitos?
-* En las <strong>redes conmutadas por paquetes</strong> el cliente va a recibir la información del servidor mediante paquetes del mismo tamaño. Cada paquete tiene cabeceras con información como el origen, el destinatario y datos de control para su procesamiento. Los paquetes se envían por un canal compartido por varios clientes a la vez, y el cliente puede recibirlos desordenados, por lo que debe “ensamblar” el mensaje una vez que reciba todos.
-* En las <strong>redes conmutadas por circuitos</strong> los equipos establecen la conexión mediante un canal físico único, que es bloqueado hasta que termina toda la conexión.
+* En las **redes conmutadas por paquetes** el cliente va a recibir la información del servidor mediante paquetes del mismo tamaño. Cada paquete tiene cabeceras con información como el origen, el destinatario y datos de control para su procesamiento. Los paquetes se envían por un canal compartido por varios clientes a la vez, y el cliente puede recibirlos desordenados, por lo que debe “ensamblar” el mensaje una vez que reciba todos.
+* En las **redes conmutadas por circuitos** los equipos establecen la conexión mediante un canal físico único, que es bloqueado hasta que termina toda la conexión.
 
 La conmutación por paquetes es más efectiva para transferencias de datos que pueden permitir atrasarse y no ser en tiempo real (Por ejemplo, envío de emails o páginas Web). La conmutación por circuitos es más efectiva para transferencias directas que requieran de actualización y comunicaciones en tiempo real (Por ejemplo, llamadas o transmisiones)
 
@@ -69,6 +69,7 @@ La PDU (Process Data Unit) es la unidad mínima del mensaje que se transmite en 
 La encapsulación de datos consiste en el agregado y encriptado de información que cada capa realiza al mensaje original, antes de pasar a la siguiente capa.
 
 Cuando un nodo emisor termina de procesar el mensaje y lo envía al nodo receptor, cada capa del receptor se encarga de desencapsular el mensaje que encapsuló esa misma capa en el emisor.
+
 # 13) Describa cuáles son las funciones de cada una de las capas del stack TCP/IP o protocolo de Internet.
 
 | Capa | Descripción |
@@ -90,12 +91,3 @@ El modelo OSI fue el primer modelo para protocolos de red. Tiene 7 capas:
 * Física
 
 El modelo TCP/IP lo que hace es agrupar las capas de Aplicación, Presentación y Sesión en una sola (la capa de aplicación), por lo que termina teniendo únicamente 5 capas.
-
-
-
-
-
-
-
-
-

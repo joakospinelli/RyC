@@ -315,7 +315,9 @@ El header `Host` se usa para especificar el nombre del dominio al que el cliente
 
 En conexiones HTTP 1.0 no era requerido, pero podía agregarse opcionalmente; en HTTP 1.1 es obligatorio que todas las comunicaciones lo tengan especificado.
 
-En HTTP/2 se reemplazó por el header `Authority`, que cumple una función similar. También se agregaron algunos pseudo-headers:
+En HTTP/2 se reemplazó por el header `Authority`, que cumple una función similar.
+
+También se agregaron algunos pseudo-headers:
 - `Method`: Método de la petición.
 - `Path`: Path al que se realiza la peticicón.
 - `Scheme`: el esquema al que se realiza la petición (HTTP o HTTPS)
