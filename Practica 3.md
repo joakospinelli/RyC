@@ -171,3 +171,90 @@ Los códigos de respuesta de DNS sirven para que el cliente conozca el estado de
 
 * NOERROR: Indica que no hubo errores para realizar la consulta DNS y que se obtuvo una respuesta válida.
 * NXDOMAIN: Indica que se realizó una petición a un dominio inexistente.
+
+# 12) Investigue los comando nslookup y host. ¿Para qué sirven?
+**NSLOOKUP** es un comando que sirve para hacer consultas DNS hacia un servidor; funciona de manera similar al `dig`, pero es más simple y muestra menos información.
+
+**HOST** es un comando usado para obtener la dirección IP correspondiente a un nombre de dominio, o viceversa.
+
+## a. Intente con ambos comandos obtener la dirección IP de `www.redes.unlp.edu.ar`
+
+<img src="./screenshots/Practica 3/ej12a-1.png">
+
+<img src="./screenshots/Practica 3/ej12a-2.png">
+
+## b. Intente con ambos comandos obtener los servidores de correo del dominio `redes.unlp.edu.ar`
+
+<img src="./screenshots/Practica 3/ej12b-1.png">
+
+<img src="./screenshots/Practica 3/ej12b-2.png">
+
+## c. Intente con ambos comandos obtener los servidores de DNS del dominio `redes.unlp.edu.ar`
+
+<img src="./screenshots/Practica 3/ej12c-1.png">
+
+<img src="./screenshots/Practica 3/ej12c-2.png">
+
+# 13) ¿Qué función cumple en Linux/Unix el archivo `/etc/hosts` o en Windows el archivo `\WINDOWS\system32\drivers\etc\hosts`?
+El archivo **HOSTS** es un archivo que usan los SO para traducir los nombres de dominios a direcciones IP. Esto sirve para que el sistema puede mapear nombres a direcciones IP localmente, sin necesidad de un servidor DNS.
+
+Este es el archivo que usa nuestra computadora para reconocer que el nombre "localhost" apunta al puerto 127.0.0.1, por ejemplo.
+
+# 14) Abra el programa Wireshark para comenzar a capturar el tráfico de red en la interfaz con IP 172.28.0.1. Una vez abierto realice una consulta DNS con el comando dig para averiguar el registro MX de redes.unlp.edu.ar y luego, otra para averiguar los registros NS correspondientes al dominio redes.unlp.edu.ar. Analice la información proporcionada por dig y compárelo con la captura.
+
+## Servidores de email (registros MX):
+<img src="./screenshots/Practica 3/ej14a-1.png">
+
+<img src="./screenshots/Practica 3/ej14a-2.png">
+
+## Servidores de DNS (registros NS):
+<img src="./screenshots/Practica 3/ej14b-1.png">
+
+<img src="./screenshots/Practica 3/ej14b-2.png">
+
+# 15) Dada la siguiente situación: “Una PC en una red determinada, con acceso a Internet, utiliza los servicios de DNS de un servidor de la red”. Analice:
+
+## a. ¿Qué tipo de consultas (iterativas o recursivas) realiza la PC a su servidor de DNS?
+La PC realiza consultas recursivas desde su resolver hacia el servidor DNS.
+
+## b. ¿Qué tipo de consultas (iterativas o recursivas) realiza el servidor de DNS para resolver requerimientos de usuario como el anterior? ¿A quién le realiza estas consultas?
+El servidor DNS que intenta resolver la consulta recursiva, realizará una serie de consultas iterativas a los distintos servidores DNS que sean necesarios hasta llegar al servidor DNS autoritativo para el dominio solicitado.
+
+# 16) Relacione DNS con HTTP. ¿Se puede navegar si no hay servicio de DNS?
+HTTP es un protocolo de transferencia de archivos, mientras que DNS es un protocolo de mapeo de direcciones IP a nombres de dominio.
+
+Lo que hace DNS es ofrecer un sistema de servidores completo para acceder a las direcciones de los servidores HTTP a partir de un formato legible por los usuarios, para que estos puedan acceder más fácilmente.
+
+HTTP podría funcionar sin DNS, puesto que permite referenciar servidores mediante su dirección IP, pero tendría los siguientes problemas:
+* Las computadoras tendrían que tener el mapeo de dirección IP - dominio localmente (en el archivo `hosts`), o el usuario tendría que acordarse de memoria las IPs.
+* Las direcciones IP de los servidores HTTP no son estáticas. Si no hubiese DNS, habría que cambiar el mapeado o consultar a una IP nueva cada vez que cambie.
+
+# 17) Observar el siguiente gráfico y contestar:
+<img src="./screenshots/Practica 3/ej17.png">
+
+## a. Si la PC-A, que usa como servidor de DNS a "DNS Server", desea obtener la IP de `www.unlp.edu.ar`, cuáles serían, y en qué orden, los pasos que se ejecutarán para obtener la respuesta.
+1. PC-A realiza una consulta recursiva al DNS Server para obtener la dirección `www.unlp.edu.ar`.
+2. DNS Server realiza una consulta iterativa `Root-Server` y recibe la dirección IP del servidor que controla el TLD del dominio (en este caso, el TLD es `.ar`, controlado por `a.dns.ar`)
+3. El DNS Server realiza una consulta iterativa a `a.dns.ar` y recibe la dirección IP del servidor `ns1.riu.edu.ar`, que es autoritativo para el dominio `edu.ar`.
+4. El DNS Server realiza una consulta iterativa a `ns1.riu.edu.ar` y recibe la dirección IP del servidor `unlp.unlp.edu.ar`, que es autoritativo para el dominio `unlp.edu.ar`.
+5. El DNS realiza una consulta iterativa a `unlp.unlp.edu.ar` y recibe finalmente la dirección IP de `www.unlp.edu.ar`, puesto que todos sus registros se encuentran en este servidor.
+
+# 18) ¿A quién debería consultar para que la respuesta sobre www.google.com sea autoritativa?
+
+<img src="./screenshots/Practica 3/ej18-1.png">
+
+Revisando los registros SOA vemos que el servidor raíz de `www.google.com` es `dns1.google.com`, por lo que si consultamos por el dominio de Google en ese servidor vamos a obtener la respuesta autoritativa.
+
+<img src="./screenshots/Practica 3/ej18-2.png">
+
+Sabemos que la respuesta es autoritativa porque tiene el flag de `aa` (Authoritative Answer).
+
+# 19) ¿Qué sucede si al servidor elegido en el paso anterior se lo consulta por www.info.unlp.edu.ar? ¿Y si la consulta es al servidor 8.8.8.8?
+
+<img src="./screenshots/Practica 3/ej19-1.png">
+
+Si le consultamos al servidor `dns1.google.com` la respuesta tiene el código de estado **REFUSED**. Esto se debe a que ese servidor no tiene registros asociados con ninguno de los dominios de `www.info.unlp.edu.ar`, por lo que no puede darnos una respuesta.
+
+<img src="./screenshots/Practica 3/ej19-2.png">
+
+El servidor `8.8.8.8` es la dirección IP de Google Public DNS, un servicio para almacenar nombres de dominio gratuito. Como este servicio tiene respuestas para los TLD de `www.info.unlp.edu.ar`, puede realizarse la consulta DNS sin problemas.
