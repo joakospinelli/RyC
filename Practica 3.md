@@ -232,10 +232,10 @@ HTTP podría funcionar sin DNS, puesto que permite referenciar servidores median
 
 ## a. Si la PC-A, que usa como servidor de DNS a "DNS Server", desea obtener la IP de `www.unlp.edu.ar`, cuáles serían, y en qué orden, los pasos que se ejecutarán para obtener la respuesta.
 1. PC-A realiza una consulta recursiva al DNS Server para obtener la dirección `www.unlp.edu.ar`.
-2. DNS Server realiza una consulta iterativa `Root-Server` y recibe la dirección IP del servidor que controla el TLD del dominio (en este caso, el TLD es `.ar`, controlado por `a.dns.ar`)
+2. DNS Server realiza una consulta iterativa a `Root-Server` y recibe la dirección IP del servidor que controla el TLD del dominio (en este caso, el TLD es `.ar`, controlado por `a.dns.ar`)
 3. El DNS Server realiza una consulta iterativa a `a.dns.ar` y recibe la dirección IP del servidor `ns1.riu.edu.ar`, que es autoritativo para el dominio `edu.ar`.
 4. El DNS Server realiza una consulta iterativa a `ns1.riu.edu.ar` y recibe la dirección IP del servidor `unlp.unlp.edu.ar`, que es autoritativo para el dominio `unlp.edu.ar`.
-5. El DNS realiza una consulta iterativa a `unlp.unlp.edu.ar` y recibe finalmente la dirección IP de `www.unlp.edu.ar`, puesto que todos sus registros se encuentran en este servidor.
+5. El DNS Serbrt realiza una consulta iterativa a `unlp.unlp.edu.ar` y recibe finalmente la dirección IP de `www.unlp.edu.ar`, puesto que todos sus registros se encuentran en este servidor.
 
 # 18) ¿A quién debería consultar para que la respuesta sobre www.google.com sea autoritativa?
 
