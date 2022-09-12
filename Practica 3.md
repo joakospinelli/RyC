@@ -18,9 +18,9 @@ Una respuesta autoritativa indica que la consulta DNS Fue respondida directament
 Los servidores autorativos son aquellos que están a cargo de un conjunto de nombres o subdominios.
 
 # 4) ¿Qué diferencia una consulta DNS recursiva de una iterativa?
-En una consulta recursiva, cuando el cliente hace una solicitud a un servidor DNS se le devuelve la dirección IP al TLD de ese dominio. Con esta dirección, el cliente debe volver a consultar al servidor nuevo, y así sucesivamente hasta obtener la dirección IP del dominio completa.
+En una consulta iterativa, cuando el cliente hace una solicitud a un servidor DNS se le devuelve la dirección IP al TLD de ese dominio. Con esta dirección, el cliente debe volver a consultar al servidor nuevo, y así sucesivamente hasta obtener la dirección IP del dominio completa.
 
-En una consulta iterativa, el cliente espera recibir la dirección IP completa en la primer solicitud al servidor DNS.
+En una consulta recursiva, el cliente espera recibir la dirección IP completa en la primer solicitud al servidor DNS.
 
 # 5) ¿Qué es el resolver?
 El resolver actúa como intermediario entre el cliente y un servidor DNS. Contiene una caché con las direcciones IP solicitadas recientemente, para entregárselas directamente al cliente en el caso de que las solicite y estén actualizadas. De esta manera, el cliente puede saltearse la comunicación directa con el servidor DNS.
@@ -99,7 +99,6 @@ Cuando se envía un mail, se le entrega al que tenga mayor prioridad. En este ca
 Agregando la opción `NS` vemos que los servidores DNS son:
 * `ns-sv-a.redes.unlp.edu.ar`
 * `ns-sv-b.redes.unlp.edu.ar`
-
 
 ## d. Repita la consulta anterior cuatro veces más. ¿Qué observa? ¿Puede explicar a qué se debe?
 Cambiaron:
