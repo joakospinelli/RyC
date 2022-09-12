@@ -161,7 +161,6 @@ Esto se debe a que la respuesta de `redes.unlp.edu.ar` viene del servidor autori
 
 ## j. Consulte por el registro A de www.practica2.redes.unlp.edu.ar. ¿Obtuvo alguna respuesta? Investigue sobre los codigos de respuesta de DNS. ¿Para qué son utilizados los mensajes NXDOMAIN y NOERROR?
 
-
 <img src="./screenshots/Practica 3/ej11j.png">
 
 Obtenemos una respuesta, pero con el código de estado `NXDOMAIN`. 
