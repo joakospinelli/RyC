@@ -69,3 +69,61 @@ En este ejemplo, se usó el formato MIME para:
 Acá no sé a qué se refiere exactamente, pero encontré una página para decodificar una imagen a partir de un texto codificado en Base64 (https://codebeautify.org/base64-to-image-converter).
 
 <img src="./screenshots/Practica 4/ej3c-2.png">
+
+# 4) Análisis del protocolo POP
+
+## a. Utilizando Wireshark, capture el tráfico de red contra el servidor de correo mientras desde la cuenta `alumnoimap@redes.unlp.edu.ar` le envía una correo a `alumnopop@redes.unlp.edu.ar` y mientras `alumnopop@redes.unlp.edu.ar` recepciona dicho correo.
+
+Envío del mail:
+
+<img src="./screenshots/Practica 4/ej4a-1.png">
+
+Recepción del mail:
+
+<img src="./screenshots/Practica 4/ej4a-2.png">
+
+## b. Utilice el filtro POP para observar los paquetes del protocolo POP en la captura generada y analice el intercambio de dicho protocolo entre el cliente y el servidor para observar los distintos comandos utilizados y su correspondiente respuesta.
+
+<img src="./screenshots/Practica 4/ej4b.png">
+
+Para recibir los mensajes en POP hay que hacer clic en el botón de "Get Messages". Los mensajes que su campo _INFO_ empiece con **C:** son enviados por el cliente y contienen las comandos o envían información solicitada por el servidor; los que empiezan con **s:** son enviados por el servidor y contienen las respuestas a los comandos.
+
+Los comandos de POP3 mostrados en la captura son:
+
+| Comando | Descripción |
+| --- | --- |
+| **CAPA** | El servidor retorna _+OK_ si acepta el comando `UIDL`. |
+| **AUTH** | Indica al servidor que se va a iniciar el proceso de autenticación para la sesión; en el primer parámetro se le pasa el tipo de autenticación (en este caso, _PLAIN_). Si el servidor responde con _+_ entonces el cliente puede enviar la información de autenticación. |
+| **STAT** |  Solicita información sobre la bandeja de entrada. En la respuesta del servidor se incluye la cantidad de correos y el tamaño total en bytes (en este caso, 1 correo y 766 bytes). |
+| **LIST** | Solicita información sobre los mensajes y el tamaño individual de cada uno. En este caso, devuelve que hay sólo un mensaje (si abro la entrada de la captura se ve también el tamaño). |
+| **UIDL** | Solicita información sobre un mensaje en concreto. El servidor retorna un identificador único para este mensaje (igual en la captura que saqué no lo usa así 😐 Capaz porque había un sólo mail). |
+| **RETR** | Solicita la recuperación de un correo en particular (pasado como parámetro). El servidor retorna el correo y el cliente _debería_ descargarlo tras recibirlo. |
+| **QUIT** | solicita la terminación de la sesión POP3. Si había mensajes marcados para ser eliminados, el servidor los elimina al recibir este comando. |
+
+# 5) Análisis del protocolo IMAP
+## a. Utilizando Wireshark, capture el tráfico de red contra el servidor de correo mientras desde la cuenta `alumnopop@redes.unlp.edu.ar` le envía una correo a `alumnoimap@redes.unlp.edu.ar` y mientras `alumnoimap@redes.unlp.edu.ar` recepciona dicho correo.
+
+Envío del mail (Esta captura se entiende mejor que la otra pero no creo que sea por el IMAP):
+
+<img src="./screenshots/Practica 4/ej5a-1.png">
+
+Recepción del mail:
+
+<img src="./screenshots/Practica 4/ej5a-2.png">
+
+## b. Utilice el filtro IMAP para observar los paquetes del protocolo IMAP en la captura generada y analice el intercambio de dicho protocolo entre el cliente y el servidor para observar los distintos comandos utilizados y su correspondiente respuesta.
+
+<img src="./screenshots/Practica 4/ej5b.png">
+
+A diferencia de POP3, los correos en IMAP se reciben automáticamente. Los mensajes que su campo _INFO_ empiece con **Request:** son enviados por el cliente y contienen las comandos o envían información solicitada por el servidor; los que empiezan con **Response:** son enviados por el servidor y contienen las respuestas a los comandos.
+
+Los comandos usados son:
+| Comando | Descripción |
+| --- | --- |
+|**Authenticate** | Indica al servidor que el cliente va a autenticarse; se le pasa como parámetro el tipo de autenticación (en este caso PLAIN). Si el servidor responde con _+_, entonces el cliente puede enviar los datos de su cuenta; luego el cliente va a responder con _OK_ si la autenticación fue correcta. |
+| **ID** | Le indica al servidor información sobre el cliente que está intentando conectarse con él (en este caso, _Thunderbird_). |
+| **ENABLE** | Solicita al servidor que habilite ciertas extensiones para el intercambio de emails (en este caso, solicita que se habilite la codificación UTF-8). |
+| **SELECT** | Solicita al servidor que se selecciona una carpeta en específico (en este caso, _INBOX_). Luego todas las operaciones sobre carpetas se realizarán sobre la seleccionada. |
+| **FETCH** | Busca un mensaje específico en la carpeta seleccionada. |
+| **IDLE** | Le indica al servidor que el cliente está listo para recibir actualizaciones de la bandeja de entrada en tiempo real, sin tener que consultarle continuamente. |
+| **NOOP** | Solicita al servidor que se mantenga abierta la conexión IMAP, para que no se cierre automáticamente. |
