@@ -127,3 +127,37 @@ Los comandos usados son:
 | **FETCH** | Busca un mensaje específico en la carpeta seleccionada. |
 | **IDLE** | Le indica al servidor que el cliente está listo para recibir actualizaciones de la bandeja de entrada en tiempo real, sin tener que consultarle continuamente. |
 | **NOOP** | Solicita al servidor que se mantenga abierta la conexión IMAP, para que no se cierre automáticamente. |
+
+# 6) IMAP vs POP3
+## a. Marque como leídos todos los correos que tenga en el buzón de entrada de `alumnopop` y de `alumnoimap`. Luego, cree una carpeta llamada POP en la cuenta de `alumnopop` y una llamada IMAP en la cuenta de `alumnoimap`. Asegurese que tiene mails en el inbox y en la carpeta recientemente creada en cada una de las cuentas.
+
+<img src="./screenshots/Practica 4/ej6a.png">
+
+## b. Cierre la sesión iniciada e ingrese nuevamente identificandose como usuario root y password packer, ejecute el cliente de correos. De esta forma, iniciará el cliente de correo con el perfil del superusuario (diferente del usuario con el que ya configuró las cuentas antes mencionadas). Luego configure las cuentas POP e IMAP de los usuarios alumnopop y alumnoimap como se describió anteriormente pero desde el cliente de correos ejecutado con el usuario root.
+
+
+<img src="./screenshots/Practica 4/ej6b-1.png">
+
+(ACÁ ME TIRA ESTE ERROR NO SÉ POR QUÉ. COMO NO ME DEJÓ CREAR LA CARPETA DE IMAP VOY A CONTESTAR SUPONIENDO QUE PUDE HACER TODO 😎😎😎)
+
+### i. ¿Qué correos ve en el buzón de entrada de ambas cuentas? ¿Están marcados como leídos o como no leídos? ¿Por qué?
+
+??????????????????????????????
+
+### ii. ¿Qué pasó con las carpetas POP e IMAP que creó en el paso anterior?
+
+La carpeta de "POP" no aparece, puesto que este protocolo no permite crear carpetas en el servidor. La carpeta en realidad se creó y almacenó localmente.
+
+La carpeta de "IMAP" es la que me dio error para crearla, pero si la hubiese hecho bien __en teoría__ debería aparecer, porque este protocolo sí permite organizar la bandeja de entrada por carpetas en el servidor; entonces, cuando recibo los mails los recibo en las carpetas.
+
+## c.  En base a lo observado. ¿Qué protocolo le parece mejor? ¿POP o IMAP? ¿Por qué? ¿Qué protocolo considera que utiliza más recursos del servidor? ¿Por qué?
+
+IMAP es un protocolo mucho más completo, que facilita la lectura y organización de los correos para el usuario, además de que puede acceder a su cuenta desde varios dispositivos y mantenerse sincronizado.
+
+También es el que utiliza más recursos del servidor, puesto que toda la información del usuario para la organización de la bandeja de entrada se almacena directamente en el servidor de correo, a diferencia de POP que descarga toda la bandeja de entrada localmente.
+
+# 7) ¿En algún caso es posible enviar más de un correo durante una misma conexión TCP?
+
+# 8) Indique sí es posible que el MSA escuche en un puerto TCP diferente a los convencionales y qué implicancias tendría.
+
+# 9) Indique sí es posible que el MTA escuche en un puerto TCP diferente a los convencionales y qué implicancias tendría.
