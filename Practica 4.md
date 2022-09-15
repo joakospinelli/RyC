@@ -155,9 +155,3 @@ La carpeta de "IMAP" es la que me dio error para crearla, pero si la hubiese hec
 IMAP es un protocolo mucho más completo, que facilita la lectura y organización de los correos para el usuario, además de que puede acceder a su cuenta desde varios dispositivos y mantenerse sincronizado.
 
 También es el que utiliza más recursos del servidor, puesto que toda la información del usuario para la organización de la bandeja de entrada se almacena directamente en el servidor de correo, a diferencia de POP que descarga toda la bandeja de entrada localmente.
-
-# 7) ¿En algún caso es posible enviar más de un correo durante una misma conexión TCP?
-
-# 8) Indique sí es posible que el MSA escuche en un puerto TCP diferente a los convencionales y qué implicancias tendría.
-
-# 9) Indique sí es posible que el MTA escuche en un puerto TCP diferente a los convencionales y qué implicancias tendría.
