@@ -155,3 +155,99 @@ La carpeta de "IMAP" es la que me dio error para crearla, pero si la hubiese hec
 IMAP es un protocolo mucho más completo, que facilita la lectura y organización de los correos para el usuario, además de que puede acceder a su cuenta desde varios dispositivos y mantenerse sincronizado.
 
 También es el que utiliza más recursos del servidor, puesto que toda la información del usuario para la organización de la bandeja de entrada se almacena directamente en el servidor de correo, a diferencia de POP que descarga toda la bandeja de entrada localmente.
+
+# 7) ¿En algún caso es posible enviar más de un correo durante una misma conexión TCP?
+
+# 8) Indique sí es posible que el MSA escuche en un puerto TCP diferente a los convencionales y qué implicancias tendría.
+
+# 9) Indique sí es posible que el MTA escuche en un puerto TCP diferente a los convencionales y qué implicancias tendría.
+
+# 10) Ejercicio integrador HTTP, DNS y MAIL
+
+(ES RE LARGO ESTE NO LO VOY A HACER 😴😴😴)
+
+# 11) Utilizando la herramienta Swaks envíe un correo electrónico
+
+`swaks` es un comando que permite enviar correos electrónicos desde la terminal.
+
+<img src="./screenshots/Practica 4/ej11.png">
+
+## a. Analice tanto la salida del comando swaks como los fuentes del mensaje recibido para responder las siguientes preguntas
+
+Salida del comando `swaks`:
+
+<img src="./screenshots/Practica 4/ej11a-1.png">
+
+<img src="./screenshots/Practica 4/ej11a-2.png">
+
+Fuente del mensaje recibido:
+
+<img src="./screenshots/Practica 4/ej11a-3.png">
+
+### i. ¿A qué corresponde la información enviada por el servidor destino como respuesta al comando EHLO? Elija dos de las opciones del listado e investigue la funcionalidad de la misma.
+
+El comando `HELO` es usado por el cliente para iniciar la sesión de intercambio de correos. Se le agrega un argumento con el nombre del ordenador (en este caso, `debian`).
+
+En este caso en particular se usa `EHLO`, que es la alternativa para el ESMTP (Enhanced SMTP); cumple la misma función que el `HELO` del SMTP tradicional, pero además el servidor va a responder si soporta o no ESMTP; si lo hace, también va a devolver la lista de los comandos de la extensión que soporta.
+
+* `STARTTLS`: le indica al servidor que el cliente quiere iniciar una transferencia en modo seguro, a través del protocolo TLS. Si el servidor lo acepta, el protocolo va a volver a su estado inicial, por lo que el cliente va a tener que iniciar la sesión de nuevo con el comando `HELO/EHLO`.
+* `PIPELINING`: le indica al servidor que la conexión con el clienteva a realizarse en modo Pipelining. Esto significa que el cliente va a poder enviar varios mensajes seguidos al servidor sin esperar la respuesta de los anteriores.
+
+### ii. Indicar cuáles cabeceras fueron agregadas por la herramienta swaks.
+
+Los headers que agregó fueron:
+* **Subject**: este lo añadimos en el comando para enviar el correo, con la opción `--h-Subject`.
+* **X-Mailer**: es usado para indicar qué herramienta se utilizó para enviar el correo. En este caso, lo agregó indicando que el mail se envió a través del comando `swaks`.
+* **Content-Type**: este se agregó porque adjuntamos un archivo, por lo que indica que que el mail es multipartes, con contenido variado; también define el divisor del MIME.
+
+### iii. ¿Cuál es el message-id del correo enviado? ¿Quién asigna dicho valor?
+
+El Message-ID es `<20220916184021.003296@debian>`, que está formado por la fecha y hora de envío del correo más el nombre del cliente (el que mandamos con `EHLO`).
+
+Comunmente los Message-ID son generados por el cliente que envía el mail o por el primer servidor de correos por el que pasan.
+
+### iv.  ¿Cuál es el software utilizado como servidor de correo electrónico?
+
+El software utilizado es _Postfix_. Esto lo vemos en el apartado _"by"_ del header `Received`, en el que aparece el servidor que recibió el mail (`mail.redes.unlp.edu.ar`) y entre paréntesis el Software.
+
+## b. Descargue de la plataforma la captura de tráfico smtp.pcap y la salida del comando swaks smtp.swaks
+
+### i. ¿Por qué el contenido del mail no puede ser leido en la captura de tráfico?
+
+Porque al comienzo de la sesión SMTP el cliente usó el comando `STARTTLS`, indicando que la comunicación va a realizarse mediante TLS. Este es un protocolo para intercambios seguros, por lo que los mensajes se encuentran encriptados de manera que no se lean.
+
+En la captura de tráfico podemos ver que, luego de que el cliente recibe la aprobación del comando `STARTTLS`, deja de haber intercambios en el protocolo SMTP, y todos pasan a ser en TLS.
+
+<img src="./screenshots/Practica 4/ej11b.png">
+
+En los mensajes del protocolo TLS que tienen en Info _"Application Data"_ podemos ver que especifica que el protocolo de los datos de la aplicación es SMTP, pero que están encriptados.
+
+## c. Realice una consulta de DNS por registros TXT al dominio info.unlp.edu.ar y entre dichos registros evalúe la información del registro SPF. ¿Por qué cree que aparecen muchos servidores autorizados?
+
+<img src="./screenshots/Practica 4/ej11c.png">
+
+Entre los registros vemos que hay uno que indica SPF, con el contenido: "`v=spf1 mx a:mail3.info.unlp.edu.ar a:listas.extension.info.unlp.edu.ar a:mail-app.info.unlp.edu.ar a:biblioteca.info.unlp.edu.ar a:catedras.info.unlp.edu.ar a:moodle.linti.unlp.edu.ar ~all`".
+
+El registro SPF es usado en DNS para indicar los servidores autorizados para enviar correos desde un dominio concreto; en este caso, desde _info.unlp.edu.ar_.  Como el protocolo SMTP no acepta autenticación, el registro SPF se usa como una manera de asegurar la veracidad del remitente de un correo.
+
+Todos los servidores de correo que aparecen son los que usan las autoridades de la facultad, por lo que todos deben estar autorizados para el envío de emails.
+
+## d. Realice una consulta de DNS por registros TXT al dominio outlook.com y analice el registro correspondiente a SPF. ¿Cuáles son los bloques de red autorizados para enviar mails?. Investigue para qué se utiliza la directiva "~all"
+
+<img src="./screenshots/Practica 4/ej11d.png">
+
+En este registro SPF se hace una diferencia entre la IPv4 autorizada y los servidores que tienen la etiqueta `include`.
+
+La dirección IPv4 (en este caso, _157.55.9.128/25_) está autorizada para enviar correos electrónicos en nombre del dominio.
+
+Los servidores que tienen antes la etiqueta `include` son servidores de terceros que están autorizados para enviar correos electrónicos en nombre del dominio. Esto también incluye a las direcciones IP contenidas por dicho servidor. En este registro, los servidores de tercerso autorizados son:
+* `spf-a.outlook.com`
+* `spf-b.outlook.com`
+* `spf.protection.outlook.com`
+* `spf-a.hotmail.com`
+* `spf-ssg-b.microsoft.com`
+* `spf-ssg-c.microsoft.com`
+
+Por último, la opción `~all` indica que los correos electrónicos que provengan de dominios o direcciones IP no autorizadas serán aceptadas, pero marcadas como inseguras o no deseadas. Las alternativas a esta opción son:
+* `+all`: cualquier servidor no incluido puede enviar correos electrónicos en nombre del dominio.
+* `-all`: los correos electrónicos de direcciones IP o dominios no autorizados son rechazados y eliminados.
