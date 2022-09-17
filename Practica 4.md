@@ -251,3 +251,33 @@ Los servidores que tienen antes la etiqueta `include` son servidores de terceros
 Por último, la opción `~all` indica que los correos electrónicos que provengan de dominios o direcciones IP no autorizadas serán aceptadas, pero marcadas como inseguras o no deseadas. Las alternativas a esta opción son:
 * `+all`: cualquier servidor no incluido puede enviar correos electrónicos en nombre del dominio.
 * `-all`: los correos electrónicos de direcciones IP o dominios no autorizados son rechazados y eliminados.
+
+# 12) Observar el gráfico a continuación y teniendo en cuenta lo siguiente, responder:
+
+<img src="./screenshots/Practica 4/ej12.png">
+
+* El usuario `juan@misitio.com.ar` en PC-A desea enviar un mail al usuario `alicia@example.com`
+* Cada organización tiene su propios servidores de DNS y Mail
+* El servidor ns1 de `misitio.com.ar` no tiene la recursión habilitada
+
+## a. El servidor de mail, mail1, y de HTTP, www, de example.com tienen la misma IP, ¿Es posible esto? Si lo es, ¿cómo lo resolvería?
+
+Es posible que esto pase, puesto que los protocolos de Mail y HTTP usan puertos distintos (SMTP usa el 25, HTTP usa el 80 o el 443 para HTTPS). Esto permite que ambos usen el mismo servidor (con la misma IP), pero realicen las comunicaciones en puertos separados.
+
+Cuando un cliente se conecta a un servidor, debe especificarle al protocolo de la capa de transporte la dirección IP y el puerto del destino (entre otras cosas). De esta manera, el servidor va a recibir las comunicaciones de ese protocolo en dicho puerto, sin interferir con otros servicios que estén esperando en otros.
+
+## b. Al enviar el mail, ¿por qué registro de DNS consultará el MUA?
+
+El MUA va a consultar por el registro MX del servidor de mail del emisor; en este caso, por el servidor `smtp-5`.
+
+## c. Una vez que el mail fue recibido por el servidor smtp-5, ¿por qué registro de DNS consultará?
+
+El servidor `smtp-5` tiene que enviar el correo al servidor receptor del mail. Para esto va a hacer una consulta a los registros MX del dominio `example.com`.
+
+## d. Si en el punto anterior smtp-5 recibiese un listado de nombres de servidores de correo, ¿será necesario realizar una consulta de DNS adicional? Si es afirmativo, ¿por qué tipo de registro y de cuál servidor preguntaría?
+
+Si recibiese un listado de servidores, probablemente se deba a que haya varios y que estén ordenados según el número de prioridad. En este caso, `smtp-5` va a tener que preguntar por el registro A del servidor con mayor prioridad (el menor número).
+
+## e. Indicar todo el proceso que deberá realizar el servidor ns1 de misitio.com.ar para obtener los servidores de mail de example.com
+
+No tengo idea porque no dice qué servidor es autoritativo de qué dominio 👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍
