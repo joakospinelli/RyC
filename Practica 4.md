@@ -142,7 +142,7 @@ Los comandos usados son:
 
 ### i. ¿Qué correos ve en el buzón de entrada de ambas cuentas? ¿Están marcados como leídos o como no leídos? ¿Por qué?
 
-??????????????????????????????
+Los correos de la cuenta `alumnopop` están marcados como no leídos, mientras que en `alumnosimap` aparecen ya leídos. Esto se debe a que el protocolo POP3 realiza las lecturas de mensajes en el cliente, por lo que los mensajes leídos o no leídos se guardan en el dispositivo en el que se leyeron. Por otro lado, IMAP permite sincronizar las lecturas con el servidor, por lo que los mensajes leídos quedan marcados directamente en el servidor, y el cliente puede verlos desde cualquier dispositivo en el que ingrese.
 
 ### ii. ¿Qué pasó con las carpetas POP e IMAP que creó en el paso anterior?
 
@@ -279,5 +279,43 @@ El servidor `smtp-5` tiene que enviar el correo al servidor receptor del mail. P
 Si recibiese un listado de servidores, probablemente se deba a que haya varios y que estén ordenados según el número de prioridad. En este caso, `smtp-5` va a tener que preguntar por el registro A del servidor con mayor prioridad (el menor número).
 
 ## e. Indicar todo el proceso que deberá realizar el servidor ns1 de misitio.com.ar para obtener los servidores de mail de example.com
+(ESTO NO ESTOY SEGURO SI ESTÁ BIEN PORQUE NS1 TIENE LA RECURSIÓN DESHABILITADA)
+* `ns1` realiza una consulta iterativa por los registros A a `root-servers` para obtener la dirección IP de `gtld-servers`.
+* `ns1` obtiene la dirección de `gtld-servers` y le realiza una consulta iterativa por los registros A para obtener la dirección IP de `mail1`.
+* `ns1` obtiene la dirección de `mail1` y le realiza una consulta iterativa para obtener sus registros MX.
 
-No tengo idea porque no dice qué servidor es autoritativo de qué dominio 👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍👍
+## f. Teniendo en cuenta el proceso de encapsulación/desencapsulación y definición de protocolos, responder V o F y justificar:
+
+### Los datos de la cabecera de SMTP deben ser analizados por el servidor DNS para responder a la consulta de los registros MX
+
+### Al ser recibidos por el servidor smtp-5 los datos agregados por el protocolo SMTP serán analizados por cada una de las capas inferiores
+
+Verdadero. En el modelo TCP/IP, para establecer las comunicaciones correctamente cada capa agrega y modifica los datos de las capas superiores. Cuando dichos datos llegan al destino, se realiza el proceso inverso en cada una de las capas.
+
+### Cada protocolo de la capa de aplicación agregará una cabecera con información propia de ese protocolo
+
+### Como son todos protocolos de la capa de aplicación, las cabeceras agregadas por el protocolo de DNS puede ser analizadas y comprendidas por el protocolo SMTP o HTTP
+
+### Para que los cliente en misitio.com.ar puedan acceder el servidor HTTP www.example.com y mostrar correctamente su contenido deben tener el mismo sistema operativo
+
+Falso. Una de las características del protocolo HTTP (y de la mayoría de protocolos definidos en RFC) es que es independiente del Sistema Operativo del cliente o del servidor; el contenido va a transmitirse de la misma manera en todos los SO siempre que soporten el protocolo deseado.
+
+### Un cliente web que desea acceder al servidor www.example.com y que no pertenece a ninguno de estos dos dominios puede usar a ns1 de misitio.com.ar como servidor de DNS para resolver la consulta.
+
+(ESTA ES LA 12.G PERO CREO QUE LES QUEDÓ MAL LA LISTA Y EN REALIDAD ERA DEL VERDADERO O FALSO)
+
+Falso. `ns1` se usa para resolver las consultas referidas a su propio servidor. Además, como no es autoritativo de ningún dominio relacionado a `www.example.com` no tiene sentido que le haga consultas para resolverlo.
+
+## h. Cuando Alicia quiera ver sus mails desde PC-D, ¿qué registro de DNS deberá consultarse?
+
+Hice la prueba en Wireshark y primero consulta por el SOA y después por A, pero no sé por qué ni si está bien. SUPONGO que no consulta por MX porque esos se usan para intercambiar mails entre servidores distintos, no para recibir los mails desde el mismo servidor.
+
+<img src="./screenshots/Practica 4/ej12h.png">
+
+## i. Indicar todos los protocolos de mail involucrados, puerto y si usan TCP o UDP, en el envío y recepción de dicho mail.
+
+Los protocolos de mail usados van a ser:
+* `SMTP`: es usado para el envío del mail. Usa el puerto 25. En la capa de transporte usa TCP.
+* `POP3`: es usado para la recepción del mail (puede ser este o IMAP). Usa el puerto 110. En la capa de transporte usa TCP.
+* `IMAP`: es usado para la recepción del mail (puede ser este o POP3). Usa el puerto 143. En la capa de transporte usa TCP.
+
