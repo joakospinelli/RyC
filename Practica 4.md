@@ -158,9 +158,17 @@ También es el que utiliza más recursos del servidor, puesto que toda la inform
 
 # 7) ¿En algún caso es posible enviar más de un correo durante una misma conexión TCP?
 
-# 8) Indique sí es posible que el MSA escuche en un puerto TCP diferente a los convencionales y qué implicancias tendría.
+Es posible si está enviando un mail a múltiples destinatarios del mismo dominio, puesto que todos los correos se envían al mismo servidor.
 
-# 9) Indique sí es posible que el MTA escuche en un puerto TCP diferente a los convencionales y qué implicancias tendría.
+Si fuesen de distinto dominio, hay que hacer una conexión TCP para cada dominio, puesto que son servidores diferentes.
+
+# 8) Indique si es posible que el MSA escuche en un puerto TCP diferente a los convencionales y qué implicancias tendría.
+
+
+
+# 9) Indique si es posible que el MTA escuche en un puerto TCP diferente a los convencionales y qué implicancias tendría.
+
+
 
 # 10) Ejercicio integrador HTTP, DNS y MAIL
 
@@ -294,7 +302,11 @@ Verdadero. En el modelo TCP/IP, para establecer las comunicaciones correctamente
 
 ### Cada protocolo de la capa de aplicación agregará una cabecera con información propia de ese protocolo
 
+Falso. Cada comunicación de un protocolo de aplicación se resuelve sola; no se acumulan muchas para completar en la misma comunicación.
+
 ### Como son todos protocolos de la capa de aplicación, las cabeceras agregadas por el protocolo de DNS puede ser analizadas y comprendidas por el protocolo SMTP o HTTP
+
+Falso. Los protocolos se definen independientemente de los demás.
 
 ### Para que los cliente en misitio.com.ar puedan acceder el servidor HTTP www.example.com y mostrar correctamente su contenido deben tener el mismo sistema operativo
 
