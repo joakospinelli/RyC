@@ -228,10 +228,10 @@ Con el comando `ss -uln` podemos ver los puertos que están esperando comunicaci
 | **SYN-SENT** | Se envió una petición de conexión TCP y se está esperando recibir una petición que coincida con la enviada. |
 | **SYN-RECEIVED** | Se envió y recibió una petición de conexión TCP, y se está esperando que se confirme la conexión. |
 | **ESTABLISHED** | Se estableció la conexión TCP. El cliente TCP puede enviar y recibir segmentos con carga útil de datos. |
-| **FIN-WAIT-1** | Se envió una petición para cerrar la conexión TCP, y se está esperando que se reciba una petición TCP del servidor reconociendo la petición enviada. |
+| **FIN-WAIT-1** | El cliente envió una petición para cerrar la conexión TCP, y se está esperando que se reciba una petición TCP del servidor reconociendo la petición enviada. |
 | **FIN-WAIT-2** | El cliente espera a recibir una petición del servidor indicando el cierre de la conexión. |
-| **CLOSE-WAIT** | El cliente espera la respuesta para terminar la conexión. |
-| **CLOSING** | El cliente espera el reconocimiento de la petición para terminar la conexión TCP. |
+| **CLOSE-WAIT** | Indica que el host remoto quiere cerrar la conexión, y le envió un mensaje `ACK` al cliente para que envíe los datos restantes o acepte el cierre. |
+| **CLOSING** | Estado especial en el que ambos lados de la conexión TCP intentaron cerrar la conexión al mismo tiempo. Esto sucede cuando ambos envian un mensaje `FIN`. |
 | **LAST-ACK** | Se espera el último segmento de reconocimiento para cerrar la conexión TCP. |
 | **TIME-WAIT** | El cliente espera un tiempo para asegurarse de que el servidor TCP recibió el reconocimiento de la terminación de la conexión. |
 | **CLOSED** | No existe conexión. |
@@ -293,3 +293,63 @@ Después de un tiempo, la conexión del Servidor que estaba en `FIN-WAIT-2` desa
 El estado `LAST-ACK` en *Cliente* indica que cerró la conexión, pero que todavía el puerto sigue abierto esperando un último mensaje `ACK` desde *Servidor*.
 
 Sin embargo, como cerramos el puerto de *Servidor* antes de terminar la conexión de *Cliente*, se quedó en ese estado esperando a recibir ese último mensaje `ACK`. Eventualmente finalizó por su cuenta y desapareció de la lista.
+
+# 14) Dada la siguiente salida del comando `ss`, responda:
+
+<img src="./screenshots/Practica 5-1/ej14.png">
+
+## a. ¿Cuántas conexiones hay establecidas?
+
+Hay 9 conexiones TCP en estado `ESTAB`, por lo que están establecidas (No sé cómo son los estados de UDP)
+
+## b. ¿Cuántos puertos hay abiertos a la espera de posibles nuevas conexiones?
+
+Hay 3 conexiones TCP en estado `LISTEN` (También hay 2 conexiones UDP en ese estado pero el estado de espera de UDP era `UNCONN` 🤨).
+
+Los puertos son 22, 80 y 25.
+
+## c. El cliente y el servidor de las comunicaciones HTTPS (puerto 443), ¿residen en la misma máquina?
+
+Hay 9 conexiones TCP hacia el puerto 443 en el servidor. En todas las conexiones la dirección local es distinta a la dirección remota.
+
+## d. El cliente y el servidor de la comunicación SSH (puerto 22), ¿residen en la misma máquina?
+
+Sí 👍. Tienen la misma dirección IP y en el apartado `users` vemos que ambos tienen el mismo PID, por lo que probablemente vengan de la misma aplicación.
+
+## e. Liste los nombres de todos los procesos asociados con cada comunicación. Indique para cada uno si se trata de un proceso cliente o uno servidor.
+
+* `SSHD`
+* `Apache2`
+* `Named`
+* `X-WWW-Browser`
+* `Postfix`
+* `SSH`
+
+## f. ¿Cuáles conexiones tuvieron el cierre iniciado por el host local y cuáles por el remoto?
+
+Las conexiones en estado `TIME-WAIT` fueron cerradas por el host local. Las que están en estado `CLOSE-WAIT` fueron cerradas por el host remoto.
+
+## g. ¿Cuántas conexiones están aún pendientes por establecerse?
+
+Una sola, la que está en estado `SYN-SENT`.
+
+# 15) Dadas las salidas de los siguientes comandos ejecutados en el cliente y el servidor, responder:
+
+<img src="./screenshots/Practica 5-1/ej15.png">
+
+## a. ¿Qué segmentos llegaron y cuáles se están perdiendo en la red?
+
+Las columnas que están entre el estado y la dirección IP local son `Recv-Q` y `Send-Q`, que indican lo siguiente:
+
+* `Recv-Q` indica los bytes que se recibieron pero que el programa asociado al socket todavía no copió.
+* `Send-Q` indica los bytes enviados que no fueron reconocidos por el host remoto.
+
+En este caso, el segmento en estado `SYN-SENT` es el que se está perdiendo.
+
+## b. ¿A qué protocolo de capa de aplicación y de transporte se está intentando conectar el cliente?
+
+El cliente está intentando conectarse al puerto 110, que es un puerto reservado para el protocolo `POP3`.
+
+## c. ¿Qué flags tendría seteado el segmento perdido?
+
+Tenía seteados los flags `SYN` y `ACK`.
