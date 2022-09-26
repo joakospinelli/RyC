@@ -164,11 +164,11 @@ Si fuesen de distinto dominio, hay que hacer una conexión TCP para cada dominio
 
 # 8) Indique si es posible que el MSA escuche en un puerto TCP diferente a los convencionales y qué implicancias tendría.
 
-
+Es posible que el MSA tenga un puerto distinto, pero se le debe informar al cliente para que se comunique al puerto que deseamos.
 
 # 9) Indique si es posible que el MTA escuche en un puerto TCP diferente a los convencionales y qué implicancias tendría.
 
-
+Es posible que el MTA tenga un puerto distinto, pero se le debe informar al cliente para que se comunique al puerto que deseamos.
 
 # 10) Ejercicio integrador HTTP, DNS y MAIL
 

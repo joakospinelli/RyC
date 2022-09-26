@@ -304,9 +304,7 @@ Hay 9 conexiones TCP en estado `ESTAB`, por lo que están establecidas (No sé c
 
 ## b. ¿Cuántos puertos hay abiertos a la espera de posibles nuevas conexiones?
 
-Hay 3 conexiones TCP en estado `LISTEN` (También hay 2 conexiones UDP en ese estado pero el estado de espera de UDP era `UNCONN` 🤨).
-
-Los puertos son 22, 80 y 25.
+Hay 5 conexiones en estado `LISTEN`, pero la del puerto 53 está repetida, así que hay 34 puertos abiertos (22, 80, 53 y 25).
 
 ## c. El cliente y el servidor de las comunicaciones HTTPS (puerto 443), ¿residen en la misma máquina?
 
@@ -314,16 +312,29 @@ Hay 9 conexiones TCP hacia el puerto 443 en el servidor. En todas las conexiones
 
 ## d. El cliente y el servidor de la comunicación SSH (puerto 22), ¿residen en la misma máquina?
 
-Sí 👍. Tienen la misma dirección IP y en el apartado `users` vemos que ambos tienen el mismo PID, por lo que probablemente vengan de la misma aplicación.
+Hay 2 comunicaciones relacionadas con el puerto 22.
+
+* En la primera, la dirección local es 127.0.0.1 (localhost) y el puerto es 22. La dirección destino es la misma y el puerto destino es 41220.
+* En la otra es exactamente al revés; la dirección local es 127.0.0.1:41220 y la dirección destino es 127.0.0.1:22
+
+Como ambos tienen la misma dirección IP, podemos deducir que tanto el cliente como el servidor están en la misma máquina y se comunican a través de puertos separados.
+
+La aplicación del servidor está corriendo el proceso `SSHD`, y el cliente está corriendo el proceso `SSH`.
 
 ## e. Liste los nombres de todos los procesos asociados con cada comunicación. Indique para cada uno si se trata de un proceso cliente o uno servidor.
 
-* `SSHD`
-* `Apache2`
-* `Named`
-* `X-WWW-Browser`
-* `Postfix`
-* `SSH`
+Hay varias formas de identificar si se trata de un proceso cliente o servidor:
+
+Si está en estado `LISTEN` es un proceso servidor. Si está en otro estado, pero está ejecutándose sobre un puerto dedicado (0 a 1023), probablemente también sea un proceso servidor.
+
+Si se está ejecutando sobre un puerto no dedicado (1024+), entonces probablemente sea un proceso cliente.
+
+* `SSHD`: Servidor
+* `Apache2`: Servidor
+* `Named`: Servidor
+* `X-WWW-Browser`: Cliente
+* `Postfix`: Servidor
+* `SSH`: Cliente
 
 ## f. ¿Cuáles conexiones tuvieron el cierre iniciado por el host local y cuáles por el remoto?
 
