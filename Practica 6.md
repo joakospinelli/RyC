@@ -62,6 +62,64 @@ Al hacer la ventana de ese tamaño se asegura de que las posiciones en el buffer
 8. `3933822138`. Número de secuencia del cliente. Va a quedar así porque en el segmento anterior el servidor lo incrementó en 1. Lo podemos suponer viendo el segmento *Ack* del segmento [SYN, ACK], o viendo el segmento *Seq* del segmento [SYN] y sumarle 1.
 9. `1047471502`. Número de Ack del cliente. Este mismo número está en el encabezado *Seq* del segmento anterior (que corresponde al servidor) pero restado en 1; cuando lo recibe el cliente lo incrementa en 1 y lo vuelve a enviar en el encabezado *Ack*.
 
-# 7) 
+# 7) Dada la sesión TCP de la figura, completar los valores marcados con un signo de interrogación.
 
+| Enunciado | Solución |
+| --- | --- |
+| <img src="./screenshots/Practica 6/ej7-1.png"> | <img src="./screenshots/Practica 6/ej7-2.png">|
+
+# 8)  ¿Qué es el RTT y cómo se calcula? Investigue la opción TCP timestamp y los campos TSval y TSecr.
+
+El RRT (*Round-trip time*) es el tiempo que tarda un paquete en volver a su emisor tras haber pasado por el destino.
+
+Los timestamps de TCP son los que permiten medir el RTT. Están formados por dos campos:
+* `TSval`: contiene un valor de 4 bytes que se le asigna al iniciar la conexión y va a ir incrementando a lo largo de la conexión.
+* `TSecr`: repite el valor de *TSval* en el otro lado de la conexión. Esto permite calcular el RTT compararando el valor de este campo con el valor inicial del *TSval*.
+
+# 9) Para la captura dada, responder las siguientes preguntas.
+## a. ¿Cuántos intentos de conexiones TCP hay?
+
+Hay 6 intentos de realizar la conexión. Podemos identificarlos buscando los segmentos SYN del handshake en 3 vías, puesto qeu tiene que enviarse uno para iniciar una conexión.
+
+En Wireshark, podemos buscar estos segmentos filtrando por `tcp.flags.syn eq 1 and tcp.flags.ack eq 0`, para no contar los segmentos SYN/ACK que además del flag SYN tienen el ACK en 1.
+
+<img src="./screenshots/Practica 6/ej9a.png">
+
+## b. ¿Cuáles son la fuente y el destino (IP:port) para c/u?
+
+
+## c. ¿Cuántas conexiones TCP exitosas hay en la captura? Cómo diferencia las exitosas de las que no lo son? ¿Cuáles flags encuentra en cada una?
+
+
+## d. Dada la primera conexión exitosa responder:
+
+### i. ¿Quién inicia la conexión?
+
+
+### ii. ¿Quién es el servidor y quién el cliente?
+
+
+### iii. ¿En qué segmentos se ve el 3-way handshake?
+
+
+### iv. ¿Cuáles ISNs se intercambian?
+
+
+### v. ¿Cuál MSS se negoció?
+
+
+### vi. ¿Cuál de los dos hosts enva la mayor cantidad de datos (IP:port)?
+
+
+## e. Identificar primer segmento de datos (origen, destino, tiempo, número de fila y número de secuencia TCP).
+
+### i. ¿Cuántos datos lleva?
+
+
+### ii. ¿Cuándo es confirmado (tiempo, número de fila y número de secuencia TCP)?
+
+
+### iii. La confirmación, ¿qué cantidad de bytes confirma?
+
+## f. ¿Quién inicia el cierre de la conexión? ¿Qué flags se utilizan? ¿En cuáles segmentos se ve (tiempo, número de fila y número de secuencia TCP)?
 
