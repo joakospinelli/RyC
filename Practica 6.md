@@ -79,7 +79,7 @@ Los timestamps de TCP son los que permiten medir el RTT. Están formados por dos
 # 9) Para la captura dada, responder las siguientes preguntas.
 ## a. ¿Cuántos intentos de conexiones TCP hay?
 
-Hay 6 intentos de realizar la conexión. Podemos identificarlos buscando los segmentos SYN del handshake en 3 vías, puesto qeu tiene que enviarse uno para iniciar una conexión.
+Hay 6 intentos de realizar la conexión. Podemos identificarlos buscando los segmentos SYN del handshake en 3 vías, puesto que tiene que enviarse uno para iniciar una conexión.
 
 En Wireshark, podemos buscar estos segmentos filtrando por `tcp.flags.syn eq 1 and tcp.flags.ack eq 0`, para no contar los segmentos SYN/ACK que además del flag SYN tienen el ACK en 1.
 
@@ -87,39 +87,114 @@ En Wireshark, podemos buscar estos segmentos filtrando por `tcp.flags.syn eq 1 a
 
 ## b. ¿Cuáles son la fuente y el destino (IP:port) para c/u?
 
+| Origen | Destino |
+| --- | --- |
+| 10.0.2.10:46907 | 10.0.4.10:5001 |
+| 10.0.2.10:45670 | 10.0.4.10:7002 |
+| 10.0.2.10:45671 | 10.0.4.10:7002 |
+| 10.0.2.10:46910 | 10.0.4.10:5001 |
+| 10.0.2.10:54424 | 10.0.4.10:9000 |
+| 10.0.2.10:54425 | 10.0.4.10:9000 |
 
 ## c. ¿Cuántas conexiones TCP exitosas hay en la captura? Cómo diferencia las exitosas de las que no lo son? ¿Cuáles flags encuentra en cada una?
 
+Hay 4 conexiones exitosas. Las exitosas se diferencian de las fallidas porque se recibe el segmento SYN/ACK del handshake de 3 vías; las conexiones fallidas envían un segmento RST.
+
+En Wireshark, podemos buscar estos segmentos filtrando por `tcp.flags.syn eq 1 and tcp.flags.ack eq 1`.
 
 ## d. Dada la primera conexión exitosa responder:
 
 ### i. ¿Quién inicia la conexión?
 
+`10.0.2.10:46907`
 
 ### ii. ¿Quién es el servidor y quién el cliente?
 
+El cliente es el que inicia la conexión (`10.0.2.10:46907`). El servidor es el host destino (`10.0.4.10:5001`).
 
 ### iii. ¿En qué segmentos se ve el 3-way handshake?
 
+<img src="./screenshots/Practica 6/ej9d-1.png">
+
+* Segmento SYN enviado por el cliente (10.0.2.10)
+* Segmento SYN/ACK enviado por el servidor (10.0.4.10)
+* Segmento ACK enviado por el cliente
 
 ### iv. ¿Cuáles ISNs se intercambian?
 
+El ISN del cliente es `2218428254`.
+
+El ISN del servidor es `1292618479`.
 
 ### v. ¿Cuál MSS se negoció?
 
+En el segmento SYN enviado por el cliente, este solicita un MSS de `1460`.
 
 ### vi. ¿Cuál de los dos hosts enva la mayor cantidad de datos (IP:port)?
 
+Con la opción de `Follow TCP Stream` vemos que el cliente (10.0.4.10) es el que envía más paquetes.
 
 ## e. Identificar primer segmento de datos (origen, destino, tiempo, número de fila y número de secuencia TCP).
 
+El primer segmento de datos es el primer segmento con flag `[PSH, ACK]` después del handshake.
+
+<img src="./screenshots/Practica 6/ej9e.png">
+
+* `Origen`: 10.0.2.10:46907
+* `Destino`: 10.0.4.10:5001
+* `Tiempo`: 0.151826
+* `Nro. de fila`: ??????????????
+* `Nro. de secuencia`: 2218428255
+
 ### i. ¿Cuántos datos lleva?
 
+En el campo de `Len` vemos que lleva 24 bytes.
 
 ### ii. ¿Cuándo es confirmado (tiempo, número de fila y número de secuencia TCP)?
+Se confirma en el segmento con flag `ACK` después del segmento `PSH,ACK` (está arriba)
 
+* `Origen`: 10.0.4.10:5001
+* `Destino`: 10.0.2.10:46907
+* `Tiempo`: 0.151925
+* `Nro. de fila`: ??????????????
+* `Nro. de secuencia`: 1292618480
 
 ### iii. La confirmación, ¿qué cantidad de bytes confirma?
 
+???????????????
+
 ## f. ¿Quién inicia el cierre de la conexión? ¿Qué flags se utilizan? ¿En cuáles segmentos se ve (tiempo, número de fila y número de secuencia TCP)?
 
+El cierre de la conexión lo inicia el cliente (10.0.2.10) con los flags `[FIN,PSH,ACK]`. Luego el servidor (10.0.4.10) responde con los flags `FIN,ACK` y finalmente el cliente cierra la conexión con un `ACK`.
+
+<img src="./screenshots/Practica 6/ej9f.png">
+
+# 10) Responda las siguientes preguntas respecto del mecanismo de control de flujo.
+## a. ¿Quién lo activa? ¿De qué forma lo hace?
+
+El control de flujo es activado por el cliente, indicándole al servidor la cantidad de datos que es capaz de aceptar en su buffer. Para esto se usa el campo `Window` del encabezado TCP.
+
+## b. ¿Qué problema resuelve?
+
+Esto permite controlar el tráfico de datos para que no se envíen más datos de los que el cliente puede procesar antes de recibir nuevos.
+
+## c. ¿Cuánto tiempo dura activo y qué situación lo desactiva?
+
+🐱‍🐉
+
+# 11) Responda las siguientes preguntas respecto del mecanismo de control de congestión.
+## a. ¿Quién lo activa el mecanismo de control de congestión? ¿Cuáles son los posibles disparadores?
+
+El mecanismo de control de congestión es activado por el dispositivo receptor cuando determina que la red por la que se están comunicando está congestionada. Esto principalmente se debe a la pérdida de paquetes en la red.
+
+## b. ¿Qué problema resuelve?
+
+El control de congestión regula los paquetes enviados en una comunicación TCP para que haya menos tráfico en una red. Esto permite que haya una circulación de paquetes más tranquila y se pierdan menos.
+
+Este problema se resuelve modificando el tamaño de la ventana de congestión para que el servidor envíe menos datos en cada comunicación.
+
+## c. Diferencie "slow start" de "congestion-avoidance".
+
+Slow-start es un algoritmo para controlar la congestión en TCP. Consiste en comenzar las transmisiones enviando un volumen de datos pequeño, e ir incrementándolo hasta que se note que la red está saturada; una vez que se satura la red, se regula la ventana para enviar una cantidad aceptable.
+
+*(El congestion-avoidance no sé xd)*
