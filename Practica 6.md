@@ -198,3 +198,60 @@ Este problema se resuelve modificando el tamaño de la ventana de congestión pa
 Slow-start es un algoritmo para controlar la congestión en TCP. Consiste en comenzar las transmisiones enviando un volumen de datos pequeño, e ir incrementándolo hasta que se note que la red está saturada; una vez que se satura la red, se regula la ventana para enviar una cantidad aceptable.
 
 *(El congestion-avoidance no sé xd)*
+
+# 12) Para la captura dada, responder las siguientes preguntas.
+## a. ¿Cuántas comunicaciones (srcIP,srcPort,dstIP,dstPort) UDP hay en la captura?
+
+UDP no tiene mecanismos para establecer las conexiones como el handshake de TCP, por lo que no es tan fácil distinguir cuando empieza una comunicación. Pero viendo la captura, algunas de las comunicaciones son:
+
+| Origen | Destino
+| --- | --- |
+| 10.0.2.10:0 | 10.0.30.10:8003 |
+| 10.0.2.10:9004 | 10.0.3.10:9045 |
+| 10.0.3.10:9045 | 10.0.2.10:9004 |
+| 10.0.2.10:9004 | 1.1.1.1:9045 |
+
+## b. ¿Cómo se podrían identificar las exitosas de las que no lo son?
+
+El protocolo UDP no tiene manera de comprobar la llegada exitosa de los paquetes.
+
+## c. ¿UDP sigue el modelo cliente/servidor?
+
+Aunque no sigue estrictamente este modelo, pueden implementarse formas para que funcione de esa manera (a diferencia de TCP que siempre se maneja como cliente/servidor).
+
+## d. ¿Qué servicios o aplicaciones suelen utilizar este protocolo?
+
+Algunas aplicaciones que usan UDP son:
+* DNS
+* TFTP (FTP Trivial)
+* RPC
+
+## e. ¿Qué hace el protocolo UDP en relación al control de errores?
+
+UDP no está orientado a la conexión, por lo que no tiene manera de controlar los errores en los datos a lo largo de la comunicación.
+
+Sin embargo, tiene mecanismos para detectar los errores: si se recibe un paquete y se le detecta un error, entonces UDP lo va a descartar sin pasárselo a la aplicación.
+
+## f. Con respecto a los puertos vistos en las capturas, ¿observa algo particular que lo diferencie de TCP?
+
+Ambas usan puertos no privilegiados, puesto que son usados por las aplicaciones.
+
+## g. Dada la primera comunicación en la cual se ven datos en ambos sentidos (identificar el primer datagrama):
+
+<img src="./screenshots/Practica 6/ej12g-1.png">
+
+### i. ¿Quién envía el primer datagrama (srcIP,srcPort)?
+
+El primer datagrama es enviado por `10.0.2.10:9004`
+
+### ii. ¿Cuantos datos se envían en un sentido y en el otro?
+
+Desde `10.0.2.10:9004` se envían 9 bytes: 4 en el primer datagrama y 5 en el último.
+
+Desde `10.0.3.10:9045` se envían 12 bytes, separados en un datagrama de 7 y otro de 5.
+
+## h. ¿Se puede calcular un RTT?
+
+(NO SÉ SI ESTÁ BIEN)
+
+El RTT calcula el tiempo en el que un paquete vuelve a su emisor tras haber pasado por el destino. Como en UDP no hay verificación por parte del emisor, el RTT no se puede calcular.
