@@ -128,33 +128,33 @@ Cuando se intenta enviar un archivo más grande que el MSS, el archivo se va a e
 
 Con la opción `-t`.
 
-<img src="./screenshots/Practica 5-1/ej9a.png">
+<img src="./screenshots/Practica 5/ej9a.png">
 
 ## b. Para listar las comunicaciones UDP establecidas.
 
 Con la opción `-u`.
 
-<img src="./screenshots/Practica 5-1/ej9b.png">
+<img src="./screenshots/Practica 5/ej9b.png">
 
 ## c. Obtener sólo los servicios TCP que están esperando comunicaciones
 
 Con la opción `-l`. Están todas en estado "LISTEN".
 
-<img src="./screenshots/Practica 5-1/ej9c.png">
+<img src="./screenshots/Practica 5/ej9c.png">
 
 ## d. Obtener sólo los servicios UDP que están esperando comunicaciones
 
 Con la opción `-l`. Están todas en estado "UNCONN".
 
-<img src="./screenshots/Practica 5-1/ej9d.png">
+<img src="./screenshots/Practica 5/ej9d.png">
 
 ## e. Repetir los anteriores para visualizar el proceso del sistema asociado a la conexión.
 
 Con la opción `-p`.
 
-<img src="./screenshots/Practica 5-1/ej9e-1.png">
+<img src="./screenshots/Practica 5/ej9e-1.png">
 
-<img src="./screenshots/Practica 5-1/ej9e-2.png">
+<img src="./screenshots/Practica 5/ej9e-2.png">
 
 ## f. Obtenga la misma información planteada en los items anteriores usando el comando `netstat`.
 
@@ -174,13 +174,13 @@ Si se envía un segmento TCP a un puerto que no está esperando comunicaciones, 
 
 Con la opción `-p` establezco el número de puerto destino. Con la opción `-S` activo el flag SYN.
 
-<img src="./screenshots/Practica 5-1/ej10a.png">
+<img src="./screenshots/Practica 5/ej10a.png">
 
 Al terminar el comando nos muestra las estadísticas, con la cantidad de paquetes transmitidos/recibidos, la pérdida de paquete y el promedio de la velocidad de transmisión.
 
 ## b. Utilice `hping3` para enviar paquetes TCP al puerto destino 40 de la máquina virtual con el flag SYN activado.
 
-<img src="./screenshots/Practica 5-1/ej10b.png">
+<img src="./screenshots/Practica 5/ej10b.png">
 
 ## c. ¿Qué diferencias nota en las respuestas obtenidas en los dos casos anteriores? ¿Puede explicar a qué se debe?
 
@@ -192,7 +192,7 @@ El flag `RA` indica que se respondió con un segmento RST/ACK, por lo que el pue
 
 Con el comando `ss -l -n -t` podemos ver los puertos que están esperando comunicaciones TCP. En la lista aparece el puerto 22, pero no el puerto 40.
 
-<img src="./screenshots/Practica 5-1/ej10c.png">
+<img src="./screenshots/Practica 5/ej10c.png">
 
 (El puerto 22 corresponde al servicio SSH. Con la opción `-n` podemos hacer que nos muestre los números de puerto en vez de los nombres de los servicios)
 
@@ -204,11 +204,11 @@ Si se envía un segmento (datagrama?? 🤨) UDP a un puerto que no está esperan
 
 Con la opción `-2` indico que quiero enviar un datagrama UDP.
 
-<img src="./screenshots/Practica 5-1/ej11a.png">
+<img src="./screenshots/Practica 5/ej11a.png">
 
 ## b. Utilice `hping3` para enviar datagramas UDP al puerto destino 40 de la máquina virtual.
 
-<img src="./screenshots/Practica 5-1/ej11b.png">
+<img src="./screenshots/Practica 5/ej11b.png">
 
 ## c. ¿Qué diferencias nota en las respuestas obtenidas en los dos casos anteriores? ¿Puede explicar a qué se debe?
 
@@ -218,7 +218,7 @@ Cuando enviamos datos al puerto 40, en consola recibimos un paquete ICMP, que in
 
 Con el comando `ss -uln` podemos ver los puertos que están esperando comunicaciones TCP. En la lista aparece el puerto 5353, pero no el puerto 40.
 
-<img src="./screenshots/Practica 5-1/ej11c.png">
+<img src="./screenshots/Practica 5/ej11c.png">
 
 # 12) Investigue los distintos tipos de estado que puede tener una conexión TCP
 
@@ -242,19 +242,19 @@ Con el comando `ss -uln` podemos ver los puertos que están esperando comunicaci
 
 Estado inicial de `watch -n1 'ss -nat'`:
 
-<img src="./screenshots/Practica 5-1/ej13a.png">
+<img src="./screenshots/Practica 5/ej13a.png">
 
 ## b. En "Servidor", utilice la herramienta *ncat* para levantar un servicio que escuche en el puerto 8001/TCP. Utilice la opcion `-k` para que el servicio sea persistente. Verifique el estado de las conexiones.
 
-<img src="./screenshots/Practica 5-1/ej13b.png">
+<img src="./screenshots/Practica 5/ej13b.png">
 
 ## c. Desde "Cliente" conectarse a dicho servicio utilizando también la herramienta *ncat*. Inspeccione el estado de las conexiones.
 
-<img src="./screenshots/Practica 5-1/ej13c.png">
+<img src="./screenshots/Practica 5/ej13c.png">
 
 ## d. Iniciar otra conexión desde "Cliente" de la misma manera que la anterior y verificar el estado de las conexiones. ¿De qué manera puede identificar cada conexión?
 
-<img src="./screenshots/Practica 5-1/ej13d.png">
+<img src="./screenshots/Practica 5/ej13d.png">
 
 Podemos identificar las conexiones porque en el cliente están en puertos distintos (una en el puerto 59912 y otra en el 59940).
 
@@ -272,7 +272,7 @@ Para garantizar que no se muestren los datos, el servidor tiene guardado el puer
 
 #### i. Cierra la última conexión establecida desde "Cliente". Evalúe los estados de las conexiones en ambos equipos
 
-<img src="./screenshots/Practica 5-1/ej13f-1.png">
+<img src="./screenshots/Practica 5/ej13f-1.png">
 
 Primero la conexión del port 59940 estuvo en estado `TIME-WAIT` por un tiempo, y después desapareció tanto del cliente como del servidor.
 
@@ -280,7 +280,7 @@ En el Wireshark me mandó como 920 millones de segmentos TCP así que no los voy
 
 #### ii. Corta el servicio de *ncat* en el Servidor (Ctrl+C). Evalúe los estados de las conexiones en ambos equipos.
 
-<img src="./screenshots/Practica 5-1/ej13f-2.png">
+<img src="./screenshots/Practica 5/ej13f-2.png">
 
 Hicimos que el Servidor deje de aceptar las conexiones en el puerto 8001, pero todavía dejamos la conexión que mandamos desde *Cliente*, así que va a quedar en estado `CLOSE-WAIT` hasta que la cerremos.
 
@@ -288,7 +288,7 @@ Después de un tiempo, la conexión del Servidor que estaba en `FIN-WAIT-2` desa
 
 #### iii. Cierra la conexión en el cliente. Evalúe nuevamente los estados de las conexiones.
 
-<img src="./screenshots/Practica 5-1/ej13f-3.png">
+<img src="./screenshots/Practica 5/ej13f-3.png">
 
 El estado `LAST-ACK` en *Cliente* indica que cerró la conexión, pero que todavía el puerto sigue abierto esperando un último mensaje `ACK` desde *Servidor*.
 
@@ -296,7 +296,7 @@ Sin embargo, como cerramos el puerto de *Servidor* antes de terminar la conexió
 
 # 14) Dada la siguiente salida del comando `ss`, responda:
 
-<img src="./screenshots/Practica 5-1/ej14.png">
+<img src="./screenshots/Practica 5/ej14.png">
 
 ## a. ¿Cuántas conexiones hay establecidas?
 
@@ -346,7 +346,7 @@ Una sola, la que está en estado `SYN-SENT`.
 
 # 15) Dadas las salidas de los siguientes comandos ejecutados en el cliente y el servidor, responder:
 
-<img src="./screenshots/Practica 5-1/ej15.png">
+<img src="./screenshots/Practica 5/ej15.png">
 
 ## a. ¿Qué segmentos llegaron y cuáles se están perdiendo en la red?
 
