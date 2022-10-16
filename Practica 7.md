@@ -99,3 +99,43 @@ Para encontrar la dirección de una N-ésima subred hay que obtener el número N
 La dirección es `128.50.177.127`.
 
 Una vez que obtenemos la dirección en bits de la subred, para obtener la dirección de broadcast tenemos que poner los bits reservados para el Host en 1 (en este caso quedaban los últimos 6).
+
+# 8) Si usted estuviese a cargo de la administración del bloque IP 195.200.45.0/24
+## a. ¿Qué máscara utilizaría si necesita definir al menos 9 subredes?
+
+Para la máscara vamos a precisar 4 bits para definir a la subred (2 <sup>4</sup> = 16).
+
+La máscara sería `255.255.255.240/28` (*11111111.11111111.11111111.11110000*)
+
+## b. Indique la dirección de subred de las primeras 9 subredes.
+
+* 1: 195.200.45.0
+* 2: 195.200.45.16
+* 3: 195.200.45.32
+* 4: 195.200.45.48
+* 5: 195.200.45.64
+* 6: 195.200.45.80
+* 7: 195.200.45.96
+* 8: 195.200.45.112
+* 9: 195.200.45.128
+
+## c. Seleccione una e indique dirección de broadcast y rango de direcciones asignables en esa subred.
+
+Dada la subred 9 ( *195.200.45.128* ):
+
+* Broadcast: `195.200.45.143`
+* Rango: `195.200.45.129 - 195.200.45.142`
+
+# 9) Dado el siguiente gráfico:
+
+<img src="./screenshots/Practica 7/ej9.png">
+
+## a. Verifique si es correcta la asignación de direcciones IP y, en caso de no serlo, modifique la misma para que lo sea.
+
+
+
+## b. ¿Cuántos bits se tomaron para hacer subredes en la red 10.0.10.0/24? ¿Cuántas subredes se podrían generar?
+
+
+
+## c. Para cada una de las redes utilizadas indique si son públicas o privadas.
