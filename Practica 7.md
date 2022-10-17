@@ -149,9 +149,9 @@ Se usaron 16 bits para la subredes. Se podrían hacer 2<sup> 16</sup> subredes (
 | | 10.0.10.0 |
 | | 192.168.5.0 |
 
-* IPs privadas de Clase A: `10.0.0.0 – 10.255.255.255 `
+* IPs privadas de Clase A: `10.0.0.0 – 10.255.255.255`
 * IPs privadas de Clase B: `172.16.0.0 – 172.31.255.255`
-* IPs privadas de Clase C: `192.168.0.0 – 192.168.255.25`
+* IPs privadas de Clase C: `192.168.0.0 – 192.168.255.255`
 
 # 10) ¿Qué es CIDR (Class Interdomain routing)? ¿Por qué resulta útil?
 
@@ -165,6 +165,15 @@ En vez de usar la sintáxis de clases para nombrar las direcciones IP, CIDR usa 
 ## b. 198.10.0.0/24
 ## c. 198.10.3.0/24
 ## d. 198.10.2.0/24
+
+198.10.000000 00.0/24
+198.10.000000 01.0/24
+198.10.000000 10.0/24
+198.10.000000 11.0/24
+
+
+
+198.10.0.0/22
 
 # 12) Listar las redes involucradas en los siguientes bloques CIDR:
 
@@ -195,11 +204,43 @@ Antes de VLSM se usaban máscaras de tamaño fijo, con las que todas las subrede
 
 ## a. ¿Es posible asignar las subredes correspondientes a la topología utilizando subnetting sin VLSM? Indique la cantidad de hosts que se desperdicia en cada subred.
 
-
+No es posible porque al dividir las subredes en subnetting fijo la cantidad de redes que se generan no es suficiente para cubrir las 5 que se necesitan.
 
 ## b. Asigne direcciones a todas las redes de la topología. Tome siempre en cada paso la primer dirección de red posible.
 
+205.10.192.0/19
 
+11001101.00001010.11000000.00000000
+
+11111111.11111111.11100000.00000000
+
+RED C: 1530 hosts -> necesita 2^11 bits para hosts. La máscara pasa a ser /21.
+
+RED C: 205.10.192.0/21
+
+Subnettear la segunda red (205.10.200.0/21) para las demás
+
+11001101.00001010.11001000.00000000
+
+RED A: 128 hosts -> necesita 2^8 bits para hosts. La máscara pasa a ser /24.
+
+RED A:  205.10.200.0/24
+
+Subnettear la tercera red (205.10.201.0/24) para las demás
+
+11001101.00001010.11001001.00000000
+
+RED B -> necesita 2^5 bits para hosts. La máscara pasa a ser /27.
+
+RED B: 205.10.201.0/27
+
+Subnettear la cuarta red (205.10.201.32/27) para las demás
+
+11001101.00001010.11001001.00100000
+
+RED D -> necesita 2^4 bits para hosts. La máscara pasa a ser /28.
+
+RED D: 205.10.201.32/28
 
 ## c. Para mantener el orden y el inventario de direcciones disponibles, haga un listado de todas las direcciones libres que le quedaron, agrupándolas utilizando CIDR.
 
