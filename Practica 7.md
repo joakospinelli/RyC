@@ -132,10 +132,46 @@ Dada la subred 9 ( *195.200.45.128* ):
 
 ## a. Verifique si es correcta la asignación de direcciones IP y, en caso de no serlo, modifique la misma para que lo sea.
 
-
+Algunos de los errores son:
+* La dirección IP `172.26.22.3` corresponde al broadcast de la subred. La dirección correcta sería la que representa a la red (`172.26.22.0`)
+* La dirección `172.17.10.17` está fuera del rango de la subred 172.17.10.0.
 
 ## b. ¿Cuántos bits se tomaron para hacer subredes en la red 10.0.10.0/24? ¿Cuántas subredes se podrían generar?
 
-
+Se usaron 16 bits para la subredes. Se podrían hacer 2<sup> 16</sup> subredes (65536).
 
 ## c. Para cada una de las redes utilizadas indique si son públicas o privadas.
+
+| Públicas | Privadas |
+| --- | --- |
+| 191.26.145.0 | 172.26.22.0 |
+| | 172.17.10.0 |
+| | 10.0.10.0 |
+| | 192.168.5.0 |
+
+* IPs privadas de Clase A: `10.0.0.0 – 10.255.255.255 `
+* IPs privadas de Clase B: `172.16.0.0 – 172.31.255.255`
+* IPs privadas de Clase C: `192.168.0.0 – 192.168.255.25`
+
+# 10) ¿Qué es CIDR (Class Interdomain routing)? ¿Por qué resulta útil?
+
+CIDR es una estrategia de routing para mejorar el modo de interpretar las direcciones IP. Su uso permitió un uso más eficiente de las direcciones IPv4 y una mejora de la jerarquía de direcciones, que reduce la sobrecarga de los routers.
+
+En vez de usar la sintáxis de clases para nombrar las direcciones IP, CIDR usa la técnica de VLSM (*Variable Length Subnet Mask*) para asignar prefijos de longitud aribtraria.
+
+# 11) ¿Cómo publicaría un router las siguientes redes si se aplica CIDR?
+## a. 198.10.1.0/24
+
+
+
+## b. 198.10.0.0/24
+
+
+
+## c. 198.10.3.0/24
+
+
+
+## d. 198.10.2.0/24
+
+# 12) Listar las redes involucradas en los siguientes bloques CIDR:
