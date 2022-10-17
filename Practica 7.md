@@ -160,18 +160,120 @@ CIDR es una estrategia de routing para mejorar el modo de interpretar las direcc
 En vez de usar la sintáxis de clases para nombrar las direcciones IP, CIDR usa la técnica de VLSM (*Variable Length Subnet Mask*) para asignar prefijos de longitud aribtraria.
 
 # 11) ¿Cómo publicaría un router las siguientes redes si se aplica CIDR?
+
 ## a. 198.10.1.0/24
-
-
-
 ## b. 198.10.0.0/24
-
-
-
 ## c. 198.10.3.0/24
-
-
-
 ## d. 198.10.2.0/24
 
 # 12) Listar las redes involucradas en los siguientes bloques CIDR:
+
+## 200.56.168.0/21
+## 195.24.0.0/13
+## 195.24/13
+
+# 13) El bloque CIDR 128.0.0.0/2 o 128/2, ¿Equivale a listar todas las direcciones de red de clase B? ¿Cuál sería el bloque CIDR que agrupa todas las redes de clase A?
+
+
+
+# 14) ¿Qué es y para qué se usa VLSM?
+
+VLSM (*Variable-Length Subnet Mask*) es una estrategia de división de subredes. Se realizan varios niveles de división de subredes para ajustar la cantidad de Hosts para cada segmento de la red.
+
+Antes de VLSM se usaban máscaras de tamaño fijo, con las que todas las subredes iban a tener la misma cantidad de Hosts, aunque sólo utilizasen unos pocos. Esto provocaba un desperdicio muy grande de direcciones IP.
+
+# 15) Describa, con sus palabras, el mecanismo para dividir subredes utilizando VLSM.
+
+* `Paso 1`: se realiza la división de subredes para la red.
+* `Paso 2`: se le asigna uno de los segmentos a la red que necesita los Hosts.
+* `Paso 3`: se realiza la división de subredes con el segmento restante del paso anterior.
+* `Paso 4`: vuelve al paso 2 y continúa el ciclo hasta distribuir totalmente los Hosts.
+
+# 16) Suponga que trabaja en una organización que tiene la red que se ve en el gráfico y debe armar el direccionamiento para la misma, minimizando el desperdicio de direcciones IP. Dicha organización posee la red 205.10.192.0/19, que es la que usted deberá utilizar
+
+<img src="./screenshots/Practica 7/ej16.png">
+
+## a. ¿Es posible asignar las subredes correspondientes a la topología utilizando subnetting sin VLSM? Indique la cantidad de hosts que se desperdicia en cada subred.
+
+
+
+## b. Asigne direcciones a todas las redes de la topología. Tome siempre en cada paso la primer dirección de red posible.
+
+
+
+## c. Para mantener el orden y el inventario de direcciones disponibles, haga un listado de todas las direcciones libres que le quedaron, agrupándolas utilizando CIDR.
+
+
+
+## d. Asigne direcciones IP a todas las interfaces de la topología que sea posible.
+
+
+
+# 17) Utilizando la siguiente topología y el bloque asignado, arme el plan de direccionamiento IPv4 teniendo en cuenta las siguientes restricciones: *Utilizar el bloque IPv4 200.100.8.0/22*.
+
+<img src="./screenshots/Practica 7/ej17.png">
+
+## a. La red A tiene 125 hosts y se espera un crecimiento máximo de 20 hosts.
+
+
+
+## b. La red X tiene 63 hosts.
+
+
+
+## c. La red B cuenta con 60 hosts
+
+
+
+## d. La red Y tiene 46 hosts y se espera un crecimiento máximo de 18 hosts.
+
+
+
+## e. En cada red, se debe desperciciar la menor cantidad de direcciones IP posibles. En este sentido, las redes utilizadas para conectar los routers deberán utilizar segmentos de red /30 de modo de desperdiciar la menor cantidad posible de direcciones IP
+
+# 18) Asigne direcciones IP en los equipos de la topología según el plan anterior.
+
+# 19) Describa qué es y para qué sirve el protocolo ICMP.
+
+ICMP es el *Protocolo de Control de Mensajes de Internet*. Es un protocolo usado para enviar mensajes de error o información de estado sobre los Hosts y servicios de la red.
+
+Se le considera un protocolo de la capa de red, aunque en realidad los mensajes ICMP son encapsulados en datagramas IP y se envían hacia el destino usando las direcciones de este protocolo.
+
+## a. Analice cómo funciona el comando ping.
+
+El comando `ping` envía un mensaje ICMP al host especificado; si está disponible, le va a devolver una respuesta ICMP. Se usa para verificar las conexiones entre un Host y otro, viendo cosas como la latencia o la pérdida de paquetes.
+
+### i. Indique el tipo y código ICMP que usa el ping.
+
+Ping envía un mensaje ICMP de "eco", de tipo 8 y con código 0.
+
+### ii. Indique el tipo y código ICMP que usa la respuesta de un ping.
+
+El host responde al Ping con un mensaje ICMP de tipo 0 y con código 0.
+
+## b. Analice cómo funcionan comandos como traceroute/tracert de Linux/Windows y cómo manipulan el campo TTL de los paquetes IP.
+
+
+
+## c. Indique la cantidad de saltos realizados desde su computadora hasta el sitio www.nasa.gov. Analice:
+
+### i. Cómo hacer para que no muestre el nombre del dominio asociado a la IP de cada salta.
+
+
+
+### ii. La razón de la aparición de * en parte o toda la respuesta de un salto.
+
+
+
+## d. Verifique el recorrido hacia los servidores de nombre del dominio unlp.edu.ar. En base al recorrido realizado, ¿podría confirmar cuál de ellos toma un camino distinto?
+
+
+
+# 20) ¿Para que se usa el bloque 127.0.0.0/8? ¿Qué PC responde a los siguientes comandos?
+## a. ping 127.0.0.1
+## b. ping 127.0.54.43
+
+# 21) Investigue para qué sirven los comandos ifconfig y route. ¿Qué comandos podría utilizar en su reemplazo? Inicie una topología con CORE, cree una máquina y utilice en ella los comandos anteriores para practicar sus diferentes opciones, mínimamente:
+
+### Configurar y quitar una dirección IP en una interfaz. 
+### Ver la tabla de ruteo de la máquina.
