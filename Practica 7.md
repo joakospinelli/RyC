@@ -209,40 +209,6 @@ No es posible porque al dividir las subredes en subnetting fijo la cantidad de r
 
 ## b. Asigne direcciones a todas las redes de la topología. Tome siempre en cada paso la primer dirección de red posible.
 
-205.10.192.0/19
-
-11001101.00001010.11000000.00000000
-
-11111111.11111111.11100000.00000000
-
-RED C: 1530 hosts -> necesita 11 bits para hosts. La máscara pasa a ser /21.
-
-RED C: 205.10.192.0/21
-
-Subnettear la segunda red (205.10.200.0/21) para las demás
-
-11001101.00001010.11001000.00000000
-
-RED A: 128 hosts -> necesita 8 bits para hosts. La máscara pasa a ser /24.
-
-RED A:  205.10.200.0/24
-
-Subnettear la tercera red (205.10.201.0/24) para las demás
-
-11001101.00001010.11001001.00000000
-
-RED B -> necesita 5 bits para hosts. La máscara pasa a ser /27.
-
-RED B: 205.10.201.0/27
-
-Subnettear la cuarta red (205.10.201.32/27) para las demás
-
-11001101.00001010.11001001.00100000
-
-RED D -> necesita 4 bits para hosts. La máscara pasa a ser /28.
-
-RED D: 205.10.201.32/28
-
 `RED C`: 1530 hosts. Necesita 11 bits p/asignar a hosts (/21). Empiezo dividiendo la red principal (*205.10.201.32/28*)
 
 La división produce 4 subredes:
