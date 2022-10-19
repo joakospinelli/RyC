@@ -166,14 +166,15 @@ En vez de usar la sintáxis de clases para nombrar las direcciones IP, CIDR usa 
 ## c. 198.10.3.0/24
 ## d. 198.10.2.0/24
 
-198.10.000000 00.0/24
-198.10.000000 01.0/24
-198.10.000000 10.0/24
-198.10.000000 11.0/24
+Las redes se pueden agrupar mediante CIDR a partir del bit en el que dejan de ser diferentes. Se les aplica una máscara para que todas den el mismo resultado; en este caso, esa máscara es de 22 bits y el router sería `198.10.0.0/22`
 
+Las direcciones IPv4 en bits son:
+* 198.10.000000 00.00000000/24
+* 198.10.000000 01.00000000/24
+* 198.10.000000 10.00000000/24
+* 198.10.000000 11.00000000/24
 
-
-198.10.0.0/22
+Ahí vemos que los bits de las direcciones son iguales hasta el bit 22, por lo que las podemos agrupar en una dirección con esa máscara.
 
 # 12) Listar las redes involucradas en los siguientes bloques CIDR:
 
@@ -214,7 +215,7 @@ No es posible porque al dividir las subredes en subnetting fijo la cantidad de r
 
 11111111.11111111.11100000.00000000
 
-RED C: 1530 hosts -> necesita 2^11 bits para hosts. La máscara pasa a ser /21.
+RED C: 1530 hosts -> necesita 11 bits para hosts. La máscara pasa a ser /21.
 
 RED C: 205.10.192.0/21
 
@@ -222,7 +223,7 @@ Subnettear la segunda red (205.10.200.0/21) para las demás
 
 11001101.00001010.11001000.00000000
 
-RED A: 128 hosts -> necesita 2^8 bits para hosts. La máscara pasa a ser /24.
+RED A: 128 hosts -> necesita 8 bits para hosts. La máscara pasa a ser /24.
 
 RED A:  205.10.200.0/24
 
@@ -230,7 +231,7 @@ Subnettear la tercera red (205.10.201.0/24) para las demás
 
 11001101.00001010.11001001.00000000
 
-RED B -> necesita 2^5 bits para hosts. La máscara pasa a ser /27.
+RED B -> necesita 5 bits para hosts. La máscara pasa a ser /27.
 
 RED B: 205.10.201.0/27
 
@@ -238,13 +239,80 @@ Subnettear la cuarta red (205.10.201.32/27) para las demás
 
 11001101.00001010.11001001.00100000
 
-RED D -> necesita 2^4 bits para hosts. La máscara pasa a ser /28.
+RED D -> necesita 4 bits para hosts. La máscara pasa a ser /28.
 
 RED D: 205.10.201.32/28
 
+`RED C`: 1530 hosts. Necesita 11 bits p/asignar a hosts (/21). Empiezo dividiendo la red principal (*205.10.201.32/28*)
+
+La división produce 4 subredes:
+* `205.10.192.0/21`: asignada a la Red C.
+* `205.10.200.0/21`: continúo dividiéndola con Subnetting.
+* `205.10.208.0/21`
+* `205.10.216.0/21`
+
+`RED A`: 128 hosts. Necesita 8 bits p/asignar a hosts (/24). Divido una de las subredes anteriores (*205.10.200.0/21*)
+
+La división produce 8 subredes:
+* `205.10.200.0/24`: asignada a la Red A.
+* `205.10.201.0/24`: continúo dividiéndola con Subnetting.
+* `205.10.202.0/24`
+* `205.10.203.0/24`
+* `205.10.204.0/24`
+* `205.10.205.0/24`
+* `205.10.206.0/24`
+* `205.10.207.0/24`
+
+`RED B`: 20 hosts. Necesita 5 bits p/asignar a hosts (/27). Divido una de las subredes anteriores (*205.10.201.0/24*)
+
+La división produce 8 subredes:
+* `205.10.201.0/27`: asignada a la Red B.
+* `205.10.201.32/27`: continúo dividiéndola con Subnetting.
+* `205.10.201.64/27`
+* `205.10.201.96/27`
+* `205.10.201.128/27`
+* `205.10.201.160/27`
+* `205.10.201.192/27`
+* `205.10.201.224/27`
+
+`RED D`: 7 hosts. Necesita 4 bits p/asignar a hosts (/28). Divido una de las subredes anteriores (*205.10.201.32/27*)
+
+La división produce 2 subredes:
+* `205.10.201.32/28`: asignada a la Red D.
+* `205.10.201.60/28`
+
 ## c. Para mantener el orden y el inventario de direcciones disponibles, haga un listado de todas las direcciones libres que le quedaron, agrupándolas utilizando CIDR.
 
+Como no todas las subredes libres quedaron consecutivas, tengo que dividir en varios grupos:
 
+| Grupo | Formado por |
+| --- | --- |
+| 205.10.208.0/20 | 205.10.208.0/21
+| |205.10.216.0/21 |
+
+| Grupo | Formado por |
+|  --- | --- |
+| 205.10.200.0/22 | 205.10.202.0/24 |
+| | 205.10.203.0/24 |
+
+| Grupo | Formado por |
+| --- | --- |
+|205.10.204.0/22 | 205.10.204.0/24 |
+| |205.10.205.0/24 |
+| | 205.10.206.0/24 |
+| | 205.10.207.0/24 |
+
+| Grupo | Formado por |
+| --- | --- |
+| 205.10.201.0/25 | 205.10.201.64/27 |
+| | 205.10.201.96/27 |
+
+| Grupo | Formado por |
+| --- | --- |
+| 205.10.201.128/25 | 205.10.201.128/27 |
+| | 205.10.201.160/27 |
+| | 205.10.201.192/27 |
+| | 205.10.201.224/27 |
 
 ## d. Asigne direcciones IP a todas las interfaces de la topología que sea posible.
 
