@@ -110,13 +110,44 @@ Los sistemas operativos tienen una tabla de ruteo propia, por lo que aunque no e
 
 ## a. ¿Está correcta esa tabla de ruteo? En caso de no estarlo, indicar el o los errores encontrados. Escribir la tabla correctamente (no es necesario agregar las redes que conectan contra los ISPs).
 
+| Entrada (Destino > Next-Hop) | Error | Solución |
+| ------- | ----- | ----- |
+| 10.0.0.12 > 10.0.0.5/30 | Las direcciones del Next-Hop no llevan máscara.| Quitar el `/30` de la dirección del Next-Hop  y dejar sólo el `10.0.0.5`.
+| 205.10.128.0 > 10.0.0.2 | La dirección `10.0.0.2` corresponde al Router D dentro de la red de 10.0.0.0/30 (lo vemos porque al final del tramo hay un `.2`). | Modificar el Next-Hop a la dirección del Router A, `10.0.0.1`. |
+| 205.20.0.193/26 > 10.0.0.1 | La dirección destino `205.20.0.193` no es una dirección de red, si no que es de Host. |  Reemplazar la red destino por la dirección de red; en este caso, `205.20.0.192/26` (Red B). |
+| N/A | Falta la entrada con Red Destino `10.0.0.8/30`. | Agregar una entrada con Red Destino `10.0.0.8`, Mask `/30`, Next-Hop `-`. |
+
 ## b. Con la tabla de ruteo del punto anterior, Red D, ¿tiene salida a Internet? ¿Por qué? ¿Cómo lo solucionaría? Suponga que los demás routers están correctamente configurados, con salida a Internet y que Rtr-D debe salir a Internet por Rtr-C.
+
+*// NO ESTOY SEGURO PERO*
+
+La tabla de ruteo de Red D no tiene ninguna entrada con destino a los ISP, por lo que no puede acceder a internet; para solucionarlo habría que agregar dicha entrada.
+
+Considerando la salida a Internet por `Rtr-C`, habría que agregar la siguiente entrada a la tabla:
+
+| Red destino | Mask | Next-Hop | Iface |
+| ----------- | ---- | -------- | ----- |
+| 130.0.10.0  | /30  | 10.0.0.10 | Acá no sé qué va xd |
 
 ## c. Teniendo en cuenta lo aplicado en el punto anterior, si en Rtr-C estuviese la siguiente entrada en su tabla de ruteo qué sucedería si desde una PC en Red D se quiere acceder un servidor con IP `163.10.5.15`.
 
+```
+|  Red Destino  |  Mask  |  Next-Hop  | Iface |
+|  -----------  |  ----  |  --------  | ----- |
+|  163.10.5.0   |  /24   |  10.0.0.9  | eth1  |
+```
+
 ## d. ¿Es posible aplicar sumarización en esa tabla, la del router Rtr-D? ¿Por qué? ¿Qué debería suceder para poder aplicarla?
 
+La sumarización (en el libro está como *agregación*) consiste en unificar varias redes individuales en una sola entrada de la tabla de ruteo; es algo similar al CIDR del subnetting, pero aplicado a la tabla de ruteo de cada router.
+
+No sé cómo se hace pero supongo que en `Rtr-D` no se puede realizar porque el router está conectado a una sola red. (AUNQUE CAPAZ SE PUEDEN SUMARIZAR LAS REDES PRIVADAS)
+
 ## e. La sumarización aplicada en el punto anterior, ¿se podría aplicar en Rtr-B? ¿Por qué?
+
+En `Rtr-B` sí podría aplicarse porque está conectado a dos redes, `205.20.0.192/26` y `205.20.0.128/26`, que ambas son subredes con la misma máscara.
+
+Ambas podrían unirse en una entrada con Red Destino `205.20.0.128/25`.
 
 ## f. Escriba la tabla de ruteo de Rtr-B teniendo en cuenta lo siguiente:
 * Debe llegarse a todas las redes del gráfico
@@ -124,7 +155,24 @@ Los sistemas operativos tienen una tabla de ruteo propia, por lo que aunque no e
 * Debe pasar por Rtr-D para llegar a Red D
 * Sumarizar si es posible
 
+| Red Destino | Mask | Next-Hop | Iface |
+| ----------- | ---- | -------- | ----- |
+| 205.20.0.128 | /25 |  - | Como está sumarizado no sé cual de los 2 eth iría |
+| 10.0.0.12 | /30 | - | eth3 |
+| 10.0.0.4 | /30 | - | eth1 |
+| 10.0.0.0 | /30 | 10.0.0.13 | eth3 |
+| 10.0.0.16 | /30 | 10.0.0.13 | eth3 |
+| 10.0.0.8 | /30 | 10.0.0.6 | eth1 |
+| 153.10.20.128 | /27 | 10.0.0.6 | eth2 |
+| 205.10.0.128 | /25 | 10.0.0.13 | eth0 |
+| 153.10.20.128 | /27 | 10.0.0.6 | eth1 |
+| 163.10.5.75 | /27 | 10.0.0.6 | eth1 |
+| 205.10.0.128 | /25 | 10.0.0.13 | eth3 |
+| 120.0.0.0 | /30 | 10.0.0.13 | eth3 |
+
 ## g. Si Rtr-C pierde conectividad contra ISP-2, ¿es posible restablecer el acceso a Internet sin esperar a que vuelva la conectividad entre esos dispositivos?
+
+Podría hacerse un camino más largo, en el que todos los dispositivos lleguen a la red a través de ISP-1 y pasando por `Rtr-A`. Sin embargo, es u ncamino más largo para algunos routers y requiere actualizar las tablas de ruteo en el caso de que no conozcan la Red Destino `120.0.0.0/30`.
 
 # 7. Evalúe para cada caso si el mensaje llegará a destino, saltos que tomará y tipo de respuesta recibida el emisor
 
