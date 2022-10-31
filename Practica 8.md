@@ -21,6 +21,8 @@ Los flags relacionados a la fragmentación son:
 
 ## ¿Qué sucede cuando el paquete debe ser reenviado por el router R1?
 
+*// CORREGIR*
+
 El enlace entre R1 y R2 tiene un MTU de 600B, que es menor al tamaño del paquete que estamos enviando. Por lo tanto, el paquete va a tener que fragmentarse y ser enviado en varios datagramas.
 
 ## Indicar cómo quedarían las paquetes fragmentados para ser enviados por el enlace entre R1 y R2.
