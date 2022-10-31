@@ -25,8 +25,6 @@ El enlace entre R1 y R2 tiene un MTU de 600B, que es menor al tamaño del paquet
 
 ## Indicar cómo quedarían las paquetes fragmentados para ser enviados por el enlace entre R1 y R2.
 
-*// NO SÉ EXACTAMENTE DE QUÉ TAMAÑO QUEDARÍA CADA FRAGMENTO, PORQUE CREO QUE HAY QUE DIVIDIRLO EN FRAGMENTOS CON TAMAÑO MÚLTIPLO DE 8 BYTES (CONSULTAR)*
-
 El datagrama original tiene un tamaño de datos de 1480B (1500B totales - 20B del header). Teniendo en cuenta que el enlace tiene un MTU de 600B, podemos dividir el datagrama en fragmentos de 532B (512B de datos + 20B del header), aunque el último quedaría de 476B.
 
 #### Fragmento 1
@@ -114,7 +112,7 @@ Los sistemas operativos tienen una tabla de ruteo propia, por lo que aunque no e
 | ------- | ----- | ----- |
 | 10.0.0.12 > 10.0.0.5/30 | Las direcciones del Next-Hop no llevan máscara.| Quitar el `/30` de la dirección del Next-Hop  y dejar sólo el `10.0.0.5`.
 | 205.10.128.0 > 10.0.0.2 | La dirección `10.0.0.2` corresponde al Router D dentro de la red de 10.0.0.0/30 (lo vemos porque al final del tramo hay un `.2`). | Modificar el Next-Hop a la dirección del Router A, `10.0.0.1`. |
-| 205.20.0.193/26 > 10.0.0.1 | La dirección destino `205.20.0.193` no es una dirección de red, si no que es de Host. |  Reemplazar la red destino por la dirección de red; en este caso, `205.20.0.192/26` (Red B). |
+| 205.20.0.193 > 10.0.0.1 | La dirección destino `205.20.0.193` no es una dirección de red, si no que es de Host. |  Reemplazar la red destino por la dirección de red; en este caso, `205.20.0.192/26` (Red B). |
 | N/A | Falta la entrada con Red Destino `10.0.0.8/30`. | Agregar una entrada con Red Destino `10.0.0.8`, Mask `/30`, Next-Hop `-`. |
 
 ## b. Con la tabla de ruteo del punto anterior, Red D, ¿tiene salida a Internet? ¿Por qué? ¿Cómo lo solucionaría? Suponga que los demás routers están correctamente configurados, con salida a Internet y que Rtr-D debe salir a Internet por Rtr-C.
@@ -141,13 +139,16 @@ Considerando la salida a Internet por `Rtr-C`, habría que agregar la siguiente 
 
 La sumarización (en el libro está como *agregación*) consiste en unificar varias redes individuales en una sola entrada de la tabla de ruteo; es algo similar al CIDR del subnetting, pero aplicado a la tabla de ruteo de cada router.
 
-No sé cómo se hace pero supongo que en `Rtr-D` no se puede realizar porque el router está conectado a una sola red. (AUNQUE CAPAZ SE PUEDEN SUMARIZAR LAS REDES PRIVADAS)
+En Rtr-D hay dos casos posibles de sumarización: las redes `10.0.0.4 - 10.0.0.0` y las redes `205.20.0.128 - 205.20.0.192`; sin embargo, ninguno de los dos casos pueden sumarizarse.
+
+* En el primer caso no se puede porque tienen distinta interfaz.
+* En el segundo caso no se puede porque cada uno hace un salto distinto.
+
+No se puede sumarizar si las entradas tienen distinta información o si se pierde información al sumarizar. Para que se pueda aplicar sobre esta tabla, las redes `205.20.0.128 - 205.20.0.192` tendrían que seguir el mismo camino.
 
 ## e. La sumarización aplicada en el punto anterior, ¿se podría aplicar en Rtr-B? ¿Por qué?
 
-En `Rtr-B` sí podría aplicarse porque está conectado a dos redes, `205.20.0.192/26` y `205.20.0.128/26`, que ambas son subredes con la misma máscara.
-
-Ambas podrían unirse en una entrada con Red Destino `205.20.0.128/25`.
+*// LO TENGO QUE REVISAR XD*
 
 ## f. Escriba la tabla de ruteo de Rtr-B teniendo en cuenta lo siguiente:
 * Debe llegarse a todas las redes del gráfico
