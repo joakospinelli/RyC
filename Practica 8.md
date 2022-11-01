@@ -20,14 +20,13 @@ Los flags relacionados a la fragmentación son:
 | Offset | 0 |
 
 ## ¿Qué sucede cuando el paquete debe ser reenviado por el router R1?
-
-*// CORREGIR*
-
-El enlace entre R1 y R2 tiene un MTU de 600B, que es menor al tamaño del paquete que estamos enviando. Por lo tanto, el paquete va a tener que fragmentarse y ser enviado en varios datagramas.
+ enlace entre R1 y R2 tiene un MTU de 600B, que es menor al tamaño del paquete que estamos enviando. Por lo tanto, el paquete va a tener que fragmentarse y ser enviado en varios datagramas.
 
 ## Indicar cómo quedarían las paquetes fragmentados para ser enviados por el enlace entre R1 y R2.
 
-El datagrama original tiene un tamaño de datos de 1480B (1500B totales - 20B del header). Teniendo en cuenta que el enlace tiene un MTU de 600B, podemos dividir el datagrama en fragmentos de 532B (512B de datos + 20B del header), aunque el último quedaría de 476B.
+El datagrama original tiene un tamaño de datos de 1480B (1500B totales - 20B del header). Teniendo en cuenta que el enlace tiene un MTU de 600B, tenemos que dividir el datagrama en partes con tamaño igual al múltiplo de 8 más cercano a 600 (sumándole 20); en este caso, 576 es el más cercano puesto que si le sumamos los 20B del header quedan 596B.
+
+Entonces, dividimos el paquete original en dos fragmentos de 596B (576+20) y uno más de 348B (328+20).
 
 #### Fragmento 1
 
@@ -36,7 +35,7 @@ El datagrama original tiene un tamaño de datos de 1480B (1500B totales - 20B de
 | IP Origen | 10.0.0.20/24 |
 | IP Destino |  10.0.2.20/24 |
 | Identification | 20543 |
-| Length | 532 |
+| Length | 596 |
 | DF | 0 |
 | MF | 1 |
 | Offset | 0 |
@@ -48,10 +47,10 @@ El datagrama original tiene un tamaño de datos de 1480B (1500B totales - 20B de
 | IP Origen | 10.0.0.20/24 |
 | IP Destino |  10.0.2.20/24 |
 | Identification | 20543 |
-| Length | 532 |
+| Length | 596 |
 | DF | 0 |
 | MF | 1 |
-| Offset | 64 |
+| Offset | 72 |
 
 #### Fragmento 3
 
@@ -60,10 +59,10 @@ El datagrama original tiene un tamaño de datos de 1480B (1500B totales - 20B de
 | IP Origen | 10.0.0.20/24 |
 | IP Destino |  10.0.2.20/24 |
 | Identification | 20543 |
-| Length | 476 |
+| Length | 348 |
 | DF | 0 |
 | MF | 0 |
-| Offset | 128 |
+| Offset | 144 |
 
 
 *// ALGUNAS ANOTACIONES DE COSAS PARA ACORDARME*
@@ -100,8 +99,6 @@ El ruteo es lo que permite que un paquete se transmita a través de la red, y se
 
 # 5. Una máquina conectada a una red pero no a Internet, ¿tiene tabla de ruteo?
 
-*// NO ESTOY SEGURO PERO*
-
 Los sistemas operativos tienen una tabla de ruteo propia, por lo que aunque no estén conectados a la red pueden verla, aunque no la van a poder utilizar.
 
 # 6. Observando el siguiente gráfico y la tabla de ruteo del router D, responder:
@@ -119,15 +116,13 @@ Los sistemas operativos tienen una tabla de ruteo propia, por lo que aunque no e
 
 ## b. Con la tabla de ruteo del punto anterior, Red D, ¿tiene salida a Internet? ¿Por qué? ¿Cómo lo solucionaría? Suponga que los demás routers están correctamente configurados, con salida a Internet y que Rtr-D debe salir a Internet por Rtr-C.
 
-*// NO ESTOY SEGURO PERO*
-
 La tabla de ruteo de Red D no tiene ninguna entrada con destino a los ISP, por lo que no puede acceder a internet; para solucionarlo habría que agregar dicha entrada.
 
 Considerando la salida a Internet por `Rtr-C`, habría que agregar la siguiente entrada a la tabla:
 
 | Red destino | Mask | Next-Hop | Iface |
 | ----------- | ---- | -------- | ----- |
-| 130.0.10.0  | /30  | 10.0.0.10 | Acá no sé qué va xd |
+| 130.0.10.0  | /30  | 10.0.0.10 | eth3 |
 
 ## c. Teniendo en cuenta lo aplicado en el punto anterior, si en Rtr-C estuviese la siguiente entrada en su tabla de ruteo qué sucedería si desde una PC en Red D se quiere acceder un servidor con IP `163.10.5.15`.
 
@@ -160,7 +155,8 @@ No se puede sumarizar si las entradas tienen distinta información o si se pierd
 
 | Red Destino | Mask | Next-Hop | Iface |
 | ----------- | ---- | -------- | ----- |
-| 205.20.0.128 | /25 |  - | Como está sumarizado no sé cual de los 2 eth iría |
+| 205.20.0.128 | /26 | - | eth0 |
+| 205.20.0.192 | /26 | - | eth2 |
 | 10.0.0.12 | /30 | - | eth3 |
 | 10.0.0.4 | /30 | - | eth1 |
 | 10.0.0.0 | /30 | 10.0.0.13 | eth3 |
