@@ -145,8 +145,6 @@ No se puede sumarizar si las entradas tienen distinta información o si se pierd
 
 ## e. La sumarización aplicada en el punto anterior, ¿se podría aplicar en Rtr-B? ¿Por qué?
 
-*// LO TENGO QUE REVISAR XD*
-
 ## f. Escriba la tabla de ruteo de Rtr-B teniendo en cuenta lo siguiente:
 * Debe llegarse a todas las redes del gráfico
 *  Debe salir a Internet por Rtr-A
@@ -162,7 +160,7 @@ No se puede sumarizar si las entradas tienen distinta información o si se pierd
 | 10.0.0.0 | /30 | 10.0.0.13 | eth3 |
 | 10.0.0.16 | /30 | 10.0.0.13 | eth3 |
 | 10.0.0.8 | /30 | 10.0.0.6 | eth1 |
-| 153.10.20.128 | /27 | 10.0.0.6 | eth2 |
+| 153.10.20.128 | /27 | 10.0.0.6 | eth1 |
 | 205.10.0.128 | /25 | 10.0.0.13 | eth0 |
 | 153.10.20.128 | /27 | 10.0.0.6 | eth1 |
 | 163.10.5.75 | /27 | 10.0.0.6 | eth1 |
@@ -178,6 +176,126 @@ Podría hacerse un camino más largo, en el que todos los dispositivos lleguen a
 <img src="./screenshots/Practica 8/ej7.png">
 
 ## a. Un mensaje ICMP enviado por PC-B a PC-C.
+
+* El Router2 al que está conectado `PC-B` va a enviar el mensaje hacia el Gateway *10.0.0.1*; es decir, hacia el Router1, a través de eth0.
+* El Router1 no tiene una entrada de ruteo para el Router3 (10.0.3.1) que es al que está conectado `PC-C`, así que va a mandarlo como 0.0.0.0 al próximo Gateway que es de nuevo Router2, a través de eth0.
+* Como Router2 envía el mensaje a Router1 y viceversa, el mensaje va a quedar en un bucle entre ambos routers así que nunca se va a enviar.
+
 ## b. Un mensaje ICMP enviado por PC-C a PC-B.
+
+* El Router3 envía el mensaje al Router4 *10.0.2.1*.
+* El Router4 tiene una entrada para el destino *10.0.1.0/24*, que su máscara corresponde con la dirección del Router2 (*10.0.1.1/24*), por lo que le envía el mensaje a través de eth0.
+* El Router2 recibe el mensaje y lo envía hacia `PC-B` siguiendo la entrada de *10.0.5.0/24*, a través de eth2.
+
 ## c. Un mensaje ICMP enviado por PC-C a 8.8.8.8.
+
+* El Router3 envía el mensaje al Router 4 siguiendo el destino *0.0.0.0*.
+* El Router3 no tiene una entrada para la dirección *8.8.8.8* ni para el default *0.0.0.0*, por lo que se pierde el mensaje.
+
 ## d. Un mensaje ICMP enviado por PC-B a 8.8.8.8.
+
+Pasa lo mismo que en el punto B.
+
+# 8. Con la máquina virtual con acceso a Internet realice las siguientes observaciones respecto de la autoconfiguración IP vía DHCP:
+
+## a. Inicie una captura de tráfico Wireshark utilizando el filtro bootp para visualizar únicamente tráfico de DHCP.
+
+## b. En una terminal de root, ejecute el comando `sudo /sbin/dhclient eth0` y analice el intercambio de paquetes capturado.
+
+Tuve que cambiar el `eth0` por `enp0s3` y ejecutar el ifconfig antes porque me tiraba un error.
+
+<img src="./screenshots/Practica 8/ej8b-1.jpg">
+
+<img src="./screenshots/Practica 8/ej8b-2.jpg">
+
+Las direcciones IP de la respuesta corresponden a direcciones IP privadas de Clase B.
+
+## c. Analice la información registrada en el archivo `/var/lib/dhcp/dhclient.leases`, ¿cuál parece su función?
+
+<img src="./screenshots/Practica 8/ej8c.jpg">
+
+Un *lease* DHCP representa la asignación de una dirección IP a un cliente de la red, por parte del servidor DHCP. Este archivo mantiene de manera persistente los *leases* activos y válidos para el cliente.
+
+## d. Ejecute el siguiente comando para eliminar información temporal asignada por el servidor DHCP: `rm /var/lib/dhcp/dhclient.leases`
+
+## e. En una terminal de root, vuelva a ejecutar el comando sudo /sbin/dhclient eth0 y analice el intercambio de paquetes capturado nuevamente ¿a que se debió la diferencia con lo observado en el punto “b”?
+
+<img src="./screenshots/Practica 8/ej8e.jpg">
+
+Si reviso nuevamente el archivo `/var/lib/dhcp/dhclient.leases` se ve que cambiaron las entradas de los Leases, pero no sé si es por eso que el resultado es distinto.
+
+## f. Tanto en “b” como en “e”, ¿qué información es brindada al host que realiza la petición DHCP, además de la dirección IP que tiene que utilizar?
+
+?
+
+# 9. ¿Qué es NAT y para qué sirve? De un ejemplo de su uso y analice cómo funcionaría en ese entorno. Ayuda: analizar el servicio de Internet hogareño en el cual varios dispositivos usan Internet simultáneamente.
+
+NAT es un mecanismo que usan los routers para traducir direcciones IP públicas a direcciones privadas dentro de su red. Permite que los dispositivos de una red reciben paquetes desde fuera de la red local, pero sin tener que asignarle una IP pública a cada uno; esto permite el ahorro de direcciones IPv4, puesto que permite usar direcciones privadas incluso para conectarse a redes externas (como Internet).
+
+# 10. ¿Qué especifica la RFC 1918 y cómo se relaciona con NAT?
+
+En el RFC 1918 se definieron los espacios de direcciones IPv4 privadas para cada clase de red IP. Estos espacios son:
+
+| Clase | Rango |
+| ----- | ----- |
+| Clase A | 10.0.0.0 – 10.255.255.255 |
+| Clase B | 172.16.0.0 – 172.31.255.255 |
+| Clase C | 192.168.0.0 – 192.168.255.255 |
+
+Gracias a NAT se puede lograr que un dispositivo que tenga asignada una dirección IPv4 privada pueda acceder o recibir información desde Internet como si fuese una red pública.
+
+# 11. En la red de su casa o trabajo verifique la dirección IP de su computadora y luego acceda a `www.cualesmiip.com`. ¿Qué observa? ¿Puede explicar qué sucede?
+
+No les voy a mostrar mi IP😔, pero usando el comando `ipconfig` en CMD (Windows) vemos que no es la misma que la que aparece en la página. Se me ocurre que es porque la dirección asignada a mi red no es la misma que se le asigna al Host (mi PC).
+
+# 12. Resuelva las consignas que se dan a continuación.
+
+## a. En base a la siguiente topología y a las tablas que se muestran, complete los datos que faltan:
+
+<img src="./screenshots/Practica 8/ej12a.jpg">
+
+Para completar los datos tenemos que tener en cuenta:
+* La dirección IPv4 de cada dispositivo
+* La traducción de cada IP:Puerto del dispositivo en la tabla NAT de su router (EJ: 192.168.1.2:49273 de PC-A es 205.20.0.29:25192 en WAN)
+* A partir de la traducción a WAN en la tabla NAT, buscar la dirección WAN en las demás tablas
+
+### PC-A (ss)
+
+| Local Address:Port | Peer Address:Port |
+| ------------------ | ----------------- |
+| 192.168.1.2:49273 | 190.50.10.63:80 |
+| 192.168.1.2:37484 | 190.50.10.63:25 |
+| 192.168.1.2:51238 | 190.50.10.81:8080 |
+
+### PC-B (ss)
+
+| Local Address:Port | Peer Address:Port |
+| ------------------ | ----------------- |
+| 192.168.1.3:52734 | 190.50.10.81:8081 |
+| 192.168.1.3:39275 | 190.50.10.81:8080 |
+
+### RTR-1 (NAT)
+
+| Lado LAN | Lado WAN |
+| -------- | -------- |
+| 192.168.1.2:49273 | 205.20.0.29:25192 |
+| 192.168.1.2:51238 | 205.20.0.29:16345 |
+| 192.168.1.3:52734 | 205.20.0.29:51091 |
+| 192.168.1.2:37484 | 205.20.0.29:41823 |
+| 192.168.1.3:39275 | 205.20.0.29:9123 |
+
+### SRV-A (ss)
+
+| Local Address:Port | Peer Address:Port |
+| ------------------ | ----------------- |
+| 190.50.10.63:80 | 205.20.0.29:25192 |
+| 190.50.10.63:25 | 205.20.0.29:41823 |
+
+### SRV-B (ss)
+
+| Local Address:Port | Peer Address:Port |
+| ------------------ | ----------------- |
+| 190.50.10.81:8080 | 205.20.0.29:16345 |
+| 190.50.10.81:8081 | 205.20.0.29:51091 |
+| 190.50.10.81:8080 | 205.20.0.29:9123 |
+
