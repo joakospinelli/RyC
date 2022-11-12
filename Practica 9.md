@@ -124,6 +124,8 @@ Para identificar direcciones:
 * **Multicast:** su prefijo es `ff00::/8`.
 * **Globales:** su prefijo es `2000::/3`. 
 
+##
+
 * `fe80::1/64`: Link-local.
 * `3ffe:4543:2:100:4398::1/64`: Global-address.
 * `::`: Anycast.
