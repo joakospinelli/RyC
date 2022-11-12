@@ -42,3 +42,92 @@ Hay que asignarla a través del Next Header de cada datagrama.
 Existe una nueva versión de ICMP para IPv6, llamada ICMPv6. A diferencia de IPv4, que ICMP podía no usarse, para la arquitectura de IPv6 es obligatorio que todos los nodos lo soporten.
 
 Los mensajes de ICMPv6 son usados para reconocer errores, detectar direcciones a través de multicast, etc. Los mensajes se dividen en *mensajes de error* o *mensajes informativos*.
+
+# 7. Transforme las siguientes direcciones MACs en Identificadores de Interfaces de 64 bits.
+
+Para convertir la direccion MAC a un ID de interfaz:
+
+* `Paso 1:` pasar el primer octeto de hexadecimal a binario.
+* `Paso 2:` invertir el séptimo bit del primer octeto.
+* `Paso 3:` pasar el primer octeto de nuevo a hexacedimal.
+* `Paso 4:` agregar `ff:fe` en el medio (entre el tercer y cuarto octeto).
+* `Paso 5:` agregar `fe80::` al principio de la dirección.
+* `Paso 6:` pasar el primer octeto a hexadecimal.
+* `Paso 7:` unificar los octetos con el de al lado para formar los campos de 16 bits.
+
+## 00:1b:77:b1:49:a1
+
+1. 0000 0000:1b:77:b1:49:a1
+
+2. 0000 0010:1b:77:b1:49:a1
+
+3. 2:1b:77:b1:49:a1
+
+4. 2:1b:77:ff:fe:b1:49:a1
+
+5. fe80::2:1b:77:ff:fe:b1:49:a1
+
+5. fe80::2:1b:77:ff:fe:b1:49:a1 *// No cambia porque el 2 es igual*
+
+6. fe80::21b:77ff:feb1:49a1
+
+## e8:1c:23:a3:21:f4
+
+1. 1110 1000:1c:23:a3:21:f4
+
+2. 1110 1010:1c:23:a3:21:f4
+
+3. 234:1c:23:a3:21:f4
+
+4. 234:1c:23:ff:fe:a3:21:f4
+
+5. fe80::234:1c:23:ff:fe:a3:21:f4
+
+6. fe80::ea:1c:23:ff:fe:a3:21:f4
+
+7. fe80::ea1c:23ff:fea3:21f4
+
+# 8. ¿Cuál de las siguientes direcciones IPv6 no son válidas?
+
+* `2001:0:1019:afde::1`: válida.
+
+* `2001::1871::4`: inválida ( *::* sólo puede usarse una vez).
+
+* `3ffg:8712:0:1:0000:aede:aaaa:1211`: inválida ( *"g"* no forma parte del sistema hexadecimal).
+
+* `3::1`: válida.
+
+* `::`: válida.
+
+* `2001::`: válida.
+
+* `3ffe:1080:1212:56ed:75da:43ff:fe90:affe`: válida.
+
+* `3ffe:1080:1212:56ed:75da:43ff:fe90:affe:1001:`: inválida (contiene un grupo de más).
+
+# 9. ¿Cuál sería una abreviatura correcta de 3f80:0000:0000:0a00:0000:0000:0000:0845?
+
+* `3f80::a00::845`: no es correcta porque usa *::* dos veces.
+
+* `3f80::a:845`: no es correcta porque ignora los bits en 0 entre *2a"* y *"845"*.
+
+* `3f80::a00:0:0:0:845:4567`: no es correcta porque le agrega un campo de más.
+
+* `3f80:0:0:a00::845`: correcta.
+
+* `3f8:0:0:a00::845`: no es correcta porque al sacar el *"0"* después de *"3f8"* estás modificando el hexadecimal.
+
+# 10. Indique si las siguientes direcciones son de link-local, global-address, multicast, etc.
+
+Para identificar direcciones:
+* **Link-Local:** su prefijo es `fe80::/64`. 
+* **Multicast:** su prefijo es `ff00::/8`.
+* **Globales:** su prefijo es `2000::/3`. 
+
+* `fe80::1/64`: Link-local.
+* `3ffe:4543:2:100:4398::1/64`: Global-address.
+* `::`: Anycast.
+* `::1`: Anycast.
+* `ff02::2`: Multicast.
+* `2818:edbc:43e1::8721:122`: Global-address.
+* `ff02::9`: Multicast.
