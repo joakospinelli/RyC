@@ -23,6 +23,11 @@ Se puede identificar la clase de una dirección IP según el valor de su primer 
 | Clase B | 16382 | 65534 |
 | Clase C | 2097150 | 254 |
 
+Otra manera de identificarlos es viendo los bits del primer campo:
+* `Clase A:` tiene el primer bit en 0.
+* `Clase B:` tiene los primeros dos bits en 10.
+* `Clase C:` tiene los primeros dos bits en 11.
+
 La cantidad de redes para cada clase depende del intervalo reservado para el primer octeto y la cantidad de octetos restantes asignados para el Net ID.
 
 La cantidad máxima de hosts para cada clase se calcula como calculándose como *2<sup> N</sup> - 2*, siendo N la cantidad de bits usados para el Host ID; la cantidad de bits la podemos obtener multiplicando la cantidad de octetos del Host ID por 2.

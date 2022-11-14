@@ -120,9 +120,9 @@ Para convertir la direccion MAC a un ID de interfaz:
 # 10. Indique si las siguientes direcciones son de link-local, global-address, multicast, etc.
 
 Para identificar direcciones:
-* **Link-Local:** su prefijo es `fe80::/64`. 
-* **Multicast:** su prefijo es `ff00::/8`.
-* **Globales:** su prefijo es `2000::/3`. 
+* **Link-Local:** su prefijo es `fe80::/64`. El primer campo siempre va a ser `fe80`, y va a tener ceros hasta el cuarto. En bits, serían los primeros 16 en `1111 1110 1000 0000`. 
+* **Multicast:** su prefijo es `ff00::/8`. En bits, serían los primeros 8 en `1111 1111`.
+* **Globales:** su prefijo es `2000::/3`. En bits, serían los primeros 3 en `001`.
 
 ##
 
