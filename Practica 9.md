@@ -133,3 +133,26 @@ Para identificar direcciones:
 * `ff02::2`: Multicast.
 * `2818:edbc:43e1::8721:122`: Global-address.
 * `ff02::9`: Multicast.
+
+# 11. Dado el siguiente diagrama, ¿qué direcciones IPv6 será capaz de autoconfigurar el nodo A en cada una de sus interfaces?
+
+<img src="./screenshots/Practica 9/ej11.png">
+
+## `eth0`
+* 0000 0000 0000 0000:1b:77:b1:49:a1
+* 0000 0010 0000 0000:1b:77:b1:49:a1
+* 200:1b:77:b1:49:a1
+* 200:1b:77:ff:fe:b1:49:a1
+* fe80::200:1b:77:ff:fe:b1:49:a1
+
+fe80::21b:77ff:feb1:49a1
+
+## `eth1`
+
+* 0000 0000 1100 0000:25:ee:ba:93:e1
+* 0000 0010 1100 0000:25:ee:ba:93:e1
+* 2c0:25:ee:ba:93:e1
+* 2c0:25:ee:ff:fe:ba:93:e1
+* fe80::2c0:25:ee:ff:fe:ba:93:e1
+
+fe80::2e5:eeff:feba:93e1
