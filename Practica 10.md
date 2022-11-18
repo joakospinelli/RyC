@@ -149,3 +149,43 @@ Desde la Estación 6 se envía el mensaje al Switch 2, pero entre el Switch y el
 Los switches no pueden producir colisiones, por lo que los únicos casos posibles de colisión son aquellos en los que hay un Hub como intermediario de la transmisión.
 
 En los ejercicios anteriores, sería posible en `i, ii, iii, iv, vi`.
+
+# 8. En la siguiente topología de red indique:
+
+<img src="./screenshots/Practica 10/ej8.png">
+
+## a. ¿Cuántos dominios de colisión hay?
+
+En total hay 6 dominios de colisión.
+
+* Cada conexión entre Switches o entre un Switch y una PC es un dominio de colisión.
+* Todos los dispositivos conectados al Hub forman parte de un único dominio de colisión.
+
+## b. ¿Cuántos dominios de broadcast hay?
+
+Hay un solo dominio de broadcast. Estos dominios se dividen a partir de los routers, pero en esta topología no hay ninguno.
+
+## c. Indique cómo se va llenando la tabla de asociaciones MAC -> PORT de los switches SW1 y SW2 durante el siguiente caso:
+
+no entendí
+
+### i. A envía una solicitud ARP consultando la MAC de C.
+
+### ii. C responde esta solicitud ARP.
+
+### iii. A envía una solicitud ARP consultando la MAC de B.
+
+### iv. B responde esta solicitud ARP.
+
+## d. Si la PC E y la PC D hubiesen estado ejecutando un tcpdump para escuchar todo lo que pasa por su interfaz de red, ¿cuáles de los requerimientos/respuestas anteriores hubiesen escuchado cada una?
+
+🦺
+
+## e. Si se reemplaza a switch1 por un router, ¿cuántos dominios de colisión y de broadcast quedarían?
+
+Los dominios de colisión quedarían iguales.
+
+El dominio de Broadcast pasaría a dividirse, puesto que el router es una estructura que limita la difusión. Pasaría a haber 2 dominios de broadcast:
+
+1. Desde Switch1 hasta todos los nodos conectados a Switch2.
+2. Desde Switch1 hasta todos los nodos conectados a HUB.
