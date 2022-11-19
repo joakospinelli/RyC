@@ -189,3 +189,29 @@ El dominio de Broadcast pasaría a dividirse, puesto que el router es una estruc
 
 1. Desde Switch1 hasta todos los nodos conectados a Switch2.
 2. Desde Switch1 hasta todos los nodos conectados a HUB.
+
+# 9. En la siguiente topología:
+
+<img src="./screenshots/Practica 10/ej9.png">
+
+## Suponiendo que todas las tablas ARP están vacías, tanto de PCs como de Routers. Si la PC_A le hace un ping a la PC_C, indique:
+
+### ¿En qué dominios de broadcast hay tráfico ARP? ¿Con qué direcciones de origen y destino?
+
+### ¿En qué dominios de broadcast hay tráfico ICMP?
+
+####  ¿Con qué direcciones de origen y destino de capa 2?
+
+#### ¿Con qué direcciones de origen y destino de capa 3?
+
+### ¿Cuál es la secuencia correcta en la que se suceden los anteriores?
+
+# 10. ¿Existe ARP en IPv6? ¿Por qué? ¿Quién cumple esa función?
+
+No existe ARP en IPv6, principalmente porque en IPv6 no se permiten las transmisiones de tipo Broadcast.
+
+Existe un mecanismo llamado NDP (*Neighbor Discovery Protocol*) que se encarga de relacionar las direcciones IPv6 con las direcciones MAC.
+
+# 11. ¿Qué es la IEEE 802.3? ¿Existen diferencias con Ethernet?
+
+IEEE 802.3 es una especificación para estandarizar Ethernet, que define qué tipo de cableado se permite y cuales son las características de la señal que transporta. Es el estándar más usado actualmente, pero aún coexiste con Ethernet "tradicional".
