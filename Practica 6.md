@@ -255,3 +255,37 @@ Desde `10.0.3.10:9045` se envían 12 bytes, separados en un datagrama de 7 y otr
 (NO SÉ SI ESTÁ BIEN)
 
 El RTT calcula el tiempo en el que un paquete vuelve a su emisor tras haber pasado por el destino. Como en UDP no hay verificación por parte del emisor, el RTT no se puede calcular.
+
+# Ejercicios de parcial
+
+# 15. Dada la salida que se muestra en la imagen, responda los ítems debajo. Suponga que ejecuta los siguientes comandos desde un host con la IP 10.100.25.90. Responda qué devuelve la ejecución de los siguientes comandos y, en caso que corresponda, especifique los flags.
+
+<img src="./screenshots/Practica 6/ej15.png">
+
+## a. hping3 -p 3306 –udp 10.100.25.135
+
+* Como ese puerto no está escuchando para UDP, va a devolver un mensaje ICMP `Port Unreachable`.
+
+## b. hping3 -S -p 25 10.100.25.135
+
+* Rechaza la conexión porque el puerto no está habilitado para escuchar comunicaciones entrantes.
+* Flags: ACK
+
+## c. hping3 -S -p 22 10.100.25.135
+
+* Rechaza la conexión porque el puerto está siendo usado.
+* Flags: RST/ACK
+
+## d. hping3 -S -p 110 10.100.25.135
+
+* Rechaza la conexión porque el puerto no está habilitado para escuchar comunicaciones entrantes.
+* RST/ACK
+
+## ¿Cuántas conexiones distintas hay establecidas? Justifique.
+
+Hay 4 conexiones establecidas. Si bien hay 5 conexiones TCP en estado ESTAB, hay dos que hacen referencia a la misma comunicación, puesto que tienen los *Local Address* y *Peer Address* invertidos.
+
+# 16. Complete en la columna Orden, el orden de aparición de los paquetes representados en cada fila.
+
+<img src="./screenshots/Practica 6/ej16-2.png">
+

@@ -256,3 +256,29 @@ Si le consultamos al servidor `dns1.google.com` la respuesta tiene el código de
 <img src="./screenshots/Practica 3/ej19-2.png">
 
 El servidor `8.8.8.8` es la dirección IP de Google Public DNS, un servicio para almacenar nombres de dominio gratuito. Como este servicio tiene respuestas para los TLD de `www.info.unlp.edu.ar`, puede realizarse la consulta DNS sin problemas.
+
+# Ejercicio de parcial
+
+# En base a la siguiente salida de dig, conteste las consignas. Justifique en todos los casos.
+
+<img src="./screenshots/Practica 3/ejparcial-1.png">
+
+## Complete las líneas donde aparece __ con el registro correcto.
+
+<img src="./screenshots/Practica 3/ejparcial-2.png">
+
+* `MX`: se pregunta por un registro MX porque en la respuesta podemos ver el número de prioridad asociado a cada servidor de mail.
+* `SOA`: en la *AUTHORITY SECTION* se encuentran los servidores autoritativos del servidor al que se pregunta. Estos se encuentran registrados en los registros SOA.
+* `A/AAAA`: A y AAAA son los registros encargados de obtener las direcciones IP de un nombre de dominio. A lo hace para IPv4, mientras que AAAA para IPv6.
+
+## ¿Es una respuesta autoritativa? En caso de no serlo, ¿a qué servidor le preguntaría para obtener una respuesta autoritativa?
+
+No es una respuesta autoritativa, puesto que la respuesta no tiene el flag `aa` activado. Para obtener una respuesta autoritativa habría que preguntarle a algunos de los dominios que están en los registros SOA.
+
+## ¿La consulta fue recursiva? ¿Y la respuesta?
+
+Tanto la consulta como la respuesta fueron recursivas, puesto que tanto el flag `rd` (consulta recursiva) como `ra` (respuesta recursiva) están activados.
+
+## ¿Qué representan los valores 10 y 5 en las líneas 7 y 8?
+
+Son los números de prioridad de los servidores de mail. Un correo entrante siempre va a intentar ir al servidor con menor número de prioridad (en este caso, `srv00.ejemplo.com`); si ese servidor está ocupado o no disponible, entonces va al siguiente.

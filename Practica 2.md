@@ -335,3 +335,33 @@ Host: www.info.unlp.edu.ar
 :authority | www.info.unlp.edu.ar
 :path | index.php
 ```
+
+# Ejercicio de parcial
+
+<img src="./screenshots/Practica 2/ejparcial.jpg">
+
+## a. ¿Qué versión de HTTP podría estar utilizando el servidor?
+
+Debido al formato de la respuesta, la versión HTTP del servidor tiene que ser 1.0 o 1.1.
+
+Como tiene los encabezados `Host` y `Connection`, es de 1.1.
+
+## b. ¿Qué método está utilizando? Dicho método, ¿retorna el recurso completo solicitado?
+
+Está usando el método *HEAD*.
+
+Este método funciona de manera similar al *GET*, pero en vez de devolver el recurso, sólo devuelve los encabezados. Debido a esto, la respuesta no retorna el recurso completo.
+
+## c. ¿Cuál es el recurso solicitado?
+
+El recurso solicitado fue */metodos/*, que según indica la cabecera `Content-Type`, es un archivo HTML.
+
+## d. ¿El método funcionó correctamente?
+
+El método funcionó correctamente. Lo podemos ver en el estado de la respuesta `200 OK`.
+
+## e. Si la solicitud hubiera llevado un encabezado que diga: `If-Modified-Since: Sat, 20 Jan 2018 13:02:41 GMT` ¿Cuál habría sido la respuesta del servidor web? ¿Qué habría hecho el navegador en este caso?
+
+El encabezado `If-Modified-Since` es menor-estricto. Como el archivo fue modificado exactamente en esa fecha, la respuesta hubiese retornado con un estado `304 Not Modified`.
+
+No sé qué hace el navegador; capaz que carga la página como la tenga en la caché.

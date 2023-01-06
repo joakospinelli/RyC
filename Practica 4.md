@@ -172,7 +172,99 @@ Es posible que el MTA tenga un puerto distinto, pero se le debe informar al clie
 
 # 10) Ejercicio integrador HTTP, DNS y MAIL
 
-(ES RE LARGO ESTE NO LO VOY A HACER 😴😴😴)
+Suponga que registró bajo su propiedad el dominio redes2022.com.ar y dispone de 4 servidores:
+* Un servidor DNS instalado configurado como primario de la zona redes2022.com.ar. (Hostname: ns1 - IP: 203.0.113.65)
+* Un servidor DNS instalado configurado como secundario de la zona redes2022.com.ar. (hostname: ns2 - IP: 203.0.113.66)
+* Un servidor de correo electrónico (Hostname: mail - IP: 203.0.113.111). Permitirá a los usuarios envíar y recibir correos a cualquier dominio de Internet.
+* Un servidor Web para el acceso a un webmail (Hostname: correo - IP: 203.0.113.8). Permitirá
+a los usuarios gestionar vía web sus correos electrónicos a través de la URL `webmail.redes2022.com.ar`
+
+## a. ¿Qué información debería informar al momento del registro para hacer visible a Internet el dominio registrado?
+
+Para hacer visible el dominio, debe pasarse cierta información al servidor autoritativo sobre el TLD; en este caso, `.com.ar`. Esta información incluye a los registros:
+* `NS`: los servidores DNS del dominio `redes2022.com.ar` (`ns1` y `ns2`)
+* `SOA`: el servidor autoritativo para el dominio; en este caso, `ns1`.
+* `A`: las direcciones IP asociadas a los servidores `ns1` (203.0.113.65) y `ns2` (203.0.113.66).
+
+## b. ¿Qué registros sería necesario configurar en el servidor de nombres? Indique toda la información necesaria del archivo de zona. Puede utilizar la siguiente tabla de referencia (evalúe la necesidad de usar cada caso los siguientes campos): Nombre del registro, Tipo de registro, Prioridad, TTL, Valor del registro.
+
+```
+redes2022.com.ar  86400 IN NS ns1.redes2022.com.ar
+redes2022.com.ar  86400 IN NS ns2.redes2022.com.ar
+
+redes2022.com.ar  86400 IN MX 5 mail.redes2022.com.ar
+
+ns1.redes2022.com.ar      86400 IN A  203.0.113.65
+ns2.redes2022.com.ar      86400 IN A  203.0.113.66
+mail.redes2022.com.ar     86400 IN A 203.0.113.111
+webmail.redes2022.com.ar  86400 IN A  203.0.113.8
+
+redes2022.com.ar  86400 IN  SOA ns1.redes2022.com.ar  admin.redes2022.com.ar  2023010600 7100 86400 360000 86400
+```
+
+## c. ¿Es necesario que el servidor de DNS acepte consultas recursivas? Justifique.
+
+No es necesario, porque al ser autoritativo puede obtener las direcciones IP de todos los servidores del dominio.
+
+## d. ¿Qué servicios/protocolos de capa de aplicación configuraría en cada servidor?
+
+* **DNS** en los servidores DNS (`ns1` y `ns2`).
+* **HTTP** en el servidor de Webmail (`webmail`). También podría implementarse **HTTPS**.
+* **SMTP** y **POP3/IMAP** en el servidor de correo (`mail`). El protocolo de recepción a elegir depende del uso que se deseé darle al servidor.
+
+## e. Para cada servidor, ¿qué puertos considera necesarios dejar abiertos a Internet?. A modo de referencia, para cada puerto indique: servidor, protocolo de transporte y número de puerto.
+
+* `ns1`: UDP, Puerto 53.
+* `ns2`: UDP, Puerto 53.
+* `mail`: TCP, Puerto 25 (SMTP), 110 (POP3) o 143 (IMAP).
+* `webmail`: TCP, Puerto 80 (HTTP) o 443 (HTTPS).
+
+## f. ¿Cómo cree que se conectaría el webmail del servidor web con el servidor de correo? ¿Qué protocolos usaría y para qué?
+
+Webmail va a cumplir la función del MUA. El cliente va a conectarse a este servidor a través de HTTP. Respecto a la funcionalidad de correos, se realizará de la siguiente manera:
+* Los correos se enviarán comunicándose con el servidor `mail` a través de SMTP.
+* La recepción de correos se realizará comunicándose con el MTA de `mail` usando el protocolo de recepción elegido (POP3 o IMAP).
+
+## g. ¿Cómo se podría hacer para que cualquier MTA reconozca como válidos los mails provienentes del dominio redes2022.com.ar solamente a los que llegan de la dirección 203.0.113.111? ¿Afectaría esto a los mails enviados desde el Webmail? Justifique.
+
+Para este tipo de validaciones se usan los registros SPF.
+
+## h. ¿Qué característica propia de SMTP, IMAP y POP hace que al adjuntar una imagen o un ejecutable sea necesario aplicar un encoding (ej. base64)?
+
+Para el encoding de archivos adjuntos, los protocolos de correo usan las especificaciones MIME. Los bytes de los archivos se codifican como código ASCII y luego el receptor puede decodificarlos; para esto es necesario que se especifique qué parte del correo está codificada, esto se hace con los headers MIME.
+
+## i. ¿Se podría enviar un mail a un usuario de modo que el receptor vea que el remitente es un usuario distinto? En caso afirmativo, ¿Cómo? ¿Es una indicación de una estafa? Justifique
+
+Es posible, puesto que el protocolo SMTP no tiene ningún tipo de autenticación propia. Al enviar un mensaje, simplemente hay que cambiar el encabezado 'From'.
+
+Esto podría usarse como una estrategia de estafa, cambiando la dirección de origen del correo para que parezca que provenga de una dirección conocida, como podría ser una persona cercana o un banco.
+
+Sin embargo, hoy en día la mayoría de servidores de correo tienen maneras de comprobar la autenticidad de los mails que llegan para no enviárselos al destinatario en el caso de que no provengan de usuarios autenticados.
+
+## j. ¿Se podría enviar un mail a un usuario de modo que el receptor vea que el destinatario es un usuario distinto? En caso afirmativo, ¿Cómo? ¿Por qué no le llegaría al destinatario que el receptor ve? ¿Es esto una indicación de una estafa? Justifique
+
+???
+
+## k. ¿Qué protocolo usará nuestro MUA para enviar un correo con remitente redes@info.unlp.edu.ar? ¿Con quién se conectará? ¿Qué información será necesaria y cómo la obtendría?
+
+* El MUA `webmail` obtiene la dirección IP de `mail` a través de DNS. A partir de esto, se comunica con el MSA para enviar el correo.
+* El MSA de `mail` se comunica con su propio MTA para realizar el envío del mail hacia `info.unlp.edu.ar`. El MTA extrae el dominio destino desde la dirección de correo, y realiza una consulta DNS para obtener los servidores de correo correspondientes a ese dominio.
+* Una vez que el MTA origen conoce los servidores de correo, realiza otra consulta DNS por los registros A para obtener la dirección IP del servidor de correo con menor prioridad.
+* Una vez que el MTA origen obtiene la dirección IP de `info.unlp.edu.ar`, le envía el correo a través de SMTP.
+
+## l. Dado que solo disponemos de un servidor de correo, ¿qué sucederá con los mails que intenten ingresar durante un reinicio del servidor?
+
+Los mensajes pendientes quedan almacenados en una cola interna, esperando a que puedan ser enviados. El servidor que envía los mails va a intentar reenviarlos periódicamente durante un tiempo determinado; cuando ese tiempo pasa, se le notifica al usuario que hubo un error con el envío.
+
+## m. Suponga que contratamos un servidor de correo electrónico en la nube para integrarlo con nuestra arquitectura de servicios.
+### i. ¿Cómo configuraría el DNS para que ambos servidores de correo se comporten de manera de dar un servicio de correo tolerante a fallos?
+
+Hay que agregar los siguientes registros:
+```
+redes2022.com.ar      86400 IN MX 10 nube.redes2022.com.ar
+nube.redes2022.com.ar 86400 IN  A <IP SERVIDOR NUBE>
+``` 
+Para la tolerancia a fallos, es importante que el servidor de mail en la nube tenga un número de prioridad mayor que el de `mail`; de esta manera, cuando los correos no puedan ser atendidos por el servidor local van a ir a la nube.
 
 # 11) Utilizando la herramienta Swaks envíe un correo electrónico
 
