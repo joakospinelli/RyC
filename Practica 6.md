@@ -172,20 +172,26 @@ El cierre de la conexión lo inicia el cliente (10.0.2.10) con los flags `[FIN,P
 # 10) Responda las siguientes preguntas respecto del mecanismo de control de flujo.
 ## a. ¿Quién lo activa? ¿De qué forma lo hace?
 
-El control de flujo es activado por el cliente, indicándole al servidor la cantidad de datos que es capaz de aceptar en su buffer. Para esto se usa el campo `Window` del encabezado TCP.
+El control de flujo es activado por el dispositivo que está recibiendo los datos (puede ser tanto el cliente como el servidor). Para esto se usa el campo `Window` del encabezado TCP, en el que indica la cantidad de bytes que puede recibir en su buffer.
 
 ## b. ¿Qué problema resuelve?
 
-Esto permite controlar el tráfico de datos para que no se envíen más datos de los que el cliente puede procesar antes de recibir nuevos.
+Esto permite controlar el tráfico de datos para que no se envíen más datos de los que el cliente puede almacenar y procesar antes de recibir nuevos.
 
 ## c. ¿Cuánto tiempo dura activo y qué situación lo desactiva?
 
-🐱‍🐉
+Una vez que se activa, dura hasta que se cierre la sesión TCP. Sin embargo, el valor de la ventana puede modificarse a lo largo de la comunicación.
 
 # 11) Responda las siguientes preguntas respecto del mecanismo de control de congestión.
 ## a. ¿Quién lo activa el mecanismo de control de congestión? ¿Cuáles son los posibles disparadores?
 
-El mecanismo de control de congestión es activado por el dispositivo receptor cuando determina que la red por la que se están comunicando está congestionada. Esto principalmente se debe a la pérdida de paquetes en la red.
+El mecanismo de control de congestión es activado por el dispositivo emisor cuando determina que la red por la que se están comunicando está congestionada. Esto principalmente se debe a la pérdida de paquetes en la red.
+
+El emisor puede darse cuenta de la congestión de la red si:
+* Se vencen los timers de los segmentos ACK que envía el receptor
+* Llegan ACK duplicados
+
+Si en una comunicación ambos dispositivos envían y reciben datos, el control de congestión se aplica independientemente en cada extremo; los dispositivos no lo negocian ni se ponen de acuerdo en cómo implementarlo.
 
 ## b. ¿Qué problema resuelve?
 
@@ -200,7 +206,7 @@ Slow-start es un algoritmo para controlar la congestión en TCP. Consiste en com
 *(El congestion-avoidance no sé xd)*
 
 # 12) Para la captura dada, responder las siguientes preguntas.
-## a. ¿Cuántas comunicaciones (srcIP,srcPort,dstIP,dstPort) UDP hay en la captura?
+## a. ¿Cuántas comunicaciones (srcIP, srcPort, dstIP, dstPort) UDP hay en la captura?
 
 UDP no tiene mecanismos para establecer las conexiones como el handshake de TCP, por lo que no es tan fácil distinguir cuando empieza una comunicación. Pero viendo la captura, algunas de las comunicaciones son:
 
@@ -283,7 +289,13 @@ El RTT calcula el tiempo en el que un paquete vuelve a su emisor tras haber pasa
 
 ## ¿Cuántas conexiones distintas hay establecidas? Justifique.
 
-Hay 4 conexiones establecidas. Si bien hay 5 conexiones TCP en estado ESTAB, hay dos que hacen referencia a la misma comunicación, puesto que tienen los *Local Address* y *Peer Address* invertidos.
+Hay 3 conexiones establecidas.
+* `127.0.0.1:3306 - 127.0.0.1:34338`
+* `127.0.0.1:48717 - 127.0.0.1:3306`
+* `127.0.0.1:22 - 200.100.120.210:61576`
+
+Si bien hay 5 conexiones TCP en estado ESTAB, las conexiones del localhost entre el puerto `3306` con `34338` y `48717` aparecen repetidas, pero con `Local Address` y `Peer Address` invertidas. Esto se debe a que el comando lista el estado de las comunicaciones desde ambos puertos, aunque se traten de la misma.
+
 
 # 16. Complete en la columna Orden, el orden de aparición de los paquetes representados en cada fila.
 
