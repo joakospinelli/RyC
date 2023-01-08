@@ -122,7 +122,9 @@ Considerando la salida a Internet por `Rtr-C`, habría que agregar la siguiente 
 
 | Red destino | Mask | Next-Hop | Iface |
 | ----------- | ---- | -------- | ----- |
-| 130.0.10.0  | /30  | 10.0.0.10 | eth3 |
+| 0.0.0.0     |  /0  | 10.0.0.10 | eth3 |
+
+La entrada `0.0.0.0/0` es un "Default Gateway". Lo que hace es que cualquier paquete IP con un destino que no esté descripto en la tabla de ruteo se va a dirigir hacia ese Next-Hop (en este caso, `Rtr-C`). Esto hace que las direcciones no locales que vayan hacia Internet sean redirigidas a ese router, y como `Rtr-C` sí tiene acceso a Internet, va a enviarlos hacia el ISP.
 
 ## c. Teniendo en cuenta lo aplicado en el punto anterior, si en Rtr-C estuviese la siguiente entrada en su tabla de ruteo qué sucedería si desde una PC en Red D se quiere acceder un servidor con IP `163.10.5.15`.
 
