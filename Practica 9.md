@@ -139,20 +139,20 @@ Para identificar direcciones:
 <img src="./screenshots/Practica 9/ej11.png">
 
 ## `eth0`
-* 0000 0000 0000 0000:1b:77:b1:49:a1
-* 0000 0010 0000 0000:1b:77:b1:49:a1
-* 200:1b:77:b1:49:a1
-* 200:1b:77:ff:fe:b1:49:a1
-* fe80::200:1b:77:ff:fe:b1:49:a1
+* 0000 0000:1b:77:b1:49:a1
+* 0000 0010:1b:77:b1:49:a1
+* 2:1b:77:b1:49:a1
+* 2:1b:77:ff:fe:b1:49:a1
+* fe80::2:1b:77:ff:fe:b1:49:a1
 
 fe80::21b:77ff:feb1:49a1
 
 ## `eth1`
 
-* 0000 0000 1100 0000:25:ee:ba:93:e1
-* 0000 0010 1100 0000:25:ee:ba:93:e1
-* 2c0:25:ee:ba:93:e1
-* 2c0:25:ee:ff:fe:ba:93:e1
-* fe80::2c0:25:ee:ff:fe:ba:93:e1
+* 1100 0000:25:ee:ba:93:e1
+* 1000 0010:25:ee:ba:93:e1
+* c2:25:ee:ba:93:e1
+* c2:25:ee:ff:fe:ba:93:e1
+* fe80::c2:25:ee:ff:fe:ba:93:e1
 
-fe80::2e5:eeff:feba:93e1
+fe80::c225:eeff:feba:93e1
