@@ -143,9 +143,10 @@ Para identificar direcciones:
 * 0000 0010:1b:77:b1:49:a1
 * 2:1b:77:b1:49:a1
 * 2:1b:77:ff:fe:b1:49:a1
-* fe80::2:1b:77:ff:fe:b1:49:a1
 
-fe80::21b:77ff:feb1:49a1
+A diferencia de una link-local, que agregamos el prefijo `fe80::`, para configurar las interfaces tenemos que agregar el prefijo del router (en este caso, 3ffe).
+
+3ffe::21b:77ff:feb1:49a1
 
 ## `eth1`
 
@@ -153,6 +154,6 @@ fe80::21b:77ff:feb1:49a1
 * 1000 0010:25:ee:ba:93:e1
 * c2:25:ee:ba:93:e1
 * c2:25:ee:ff:fe:ba:93:e1
-* fe80::c2:25:ee:ff:fe:ba:93:e1
+* 2818::c2:25:ee:ff:fe:ba:93:e1
 
-fe80::c225:eeff:feba:93e1
+2818::c225:eeff:feba:93e1
