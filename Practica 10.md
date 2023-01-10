@@ -80,6 +80,18 @@ Esta traducción se realiza a través de una tabla ARP. Cada entrada de esta tab
 
 Si un nodo quiere enviarle un datagrama a otro y no lo tiene en su tabla, entonces debe enviar un **paquete ARP** al adaptador; éste lo recibe, lo reenvía a la dirección de Broadcast y espera a que el nodo con la dirección IP que buscamos le conteste. Cuando obtiene la respuesta, le devuelve la dirección IP encontrada y el emisor puede actualizar su tabla ARP para enviar el mensaje al destino.
 
+El paquete ARP tiene las entradas:
+* Dirección MAC y Dirección IP del emisor
+* Dirección MAC y Dirección IP del receptor
+
+Además, se le agregan los datos de la capa de enlace:
+* Dirección MAC origen
+* Dirección MAC destino
+
+Cuando se envía el **ARP Request**, la dirección MAC destino es la de Broadcast (`FF:FF:FF:FF:FF:FF`) y la dirección MAC del receptor está en 0 (es la que estamos buscando; no la conocemos todavía).
+
+Cuando el receptor recibe el ARP request, sus datos pasan a ser los del emisor (esta vez con la MAC correspondiente), mientras que el emisor original pasa a ser el receptor. La dirección MAC origen pasa ser la del receptor, y la destino la del emisor original.
+
 # 7. Dado el siguiente esquema de red, responda:
 
 <img src="./screenshots/Practica 10/ej7.png">

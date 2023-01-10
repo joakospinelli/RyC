@@ -156,3 +156,9 @@ fe80::21b:77ff:feb1:49a1
 * fe80::2c0:25:ee:ff:fe:ba:93:e1
 
 fe80::2e5:eeff:feba:93e1
+
+## 12. Al autogenerarse una dirección IPv6 sus últimos 64 bits en muchas ocasiones no se deducen de la dirección MAC, se generan de forma random, ¿por qué sucede esto? ¿Qué es lo que se intenta evitar?
+
+La autogeneración aleatoria de las direcciones IPv6 se decidió en el RFC 8981. Además de generarse aleatoriamente, estas direcciones son temporales, por lo que caducan cada cierto tiempo y deben reemplazarse por nuevas.
+
+El problema original surge porque las direcciones MAC son estáticas y únicas, por lo que al conectarse a la red con una dirección IPv6 deducida a partir de la MAC haría que un usuario sea muy fácil de rastrear y seguir. Gracias a la autogeneración aleatoria y las direcciones temporales, el rastreamiento y seguimiento de una dirección a través de la red se vuelve difícil, o casi imposible.
