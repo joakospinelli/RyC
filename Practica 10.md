@@ -179,19 +179,69 @@ Hay un solo dominio de broadcast. Estos dominios se dividen a partir de los rout
 
 ## c. Indique cómo se va llenando la tabla de asociaciones MAC -> PORT de los switches SW1 y SW2 durante el siguiente caso:
 
-no entendí
+(Suponiendo que los puertos empiezan a contarse en 0)
 
 ### i. A envía una solicitud ARP consultando la MAC de C.
 
+#### Switch 1
+| MAC | Puerto |
+| --- | ------ |
+| MAC_PC-A | e0 |
+
+#### Switch 2
+| MAC | Puerto |
+| --- | ------ |
+| MAC_PC-A | e0 |
+
 ### ii. C responde esta solicitud ARP.
+
+#### Switch 1
+| MAC | Puerto |
+| --- | ------ |
+| MAC_PC-A | e0 |
+| MAC_PC-C | e1 |
+
+#### Switch 2
+| MAC | Puerto |
+| --- | ------ |
+| MAC_PC-A | e0 |
+| MAC_PC-C | e7 |
 
 ### iii. A envía una solicitud ARP consultando la MAC de B.
 
+Ninguna cambia porque sólo Switch 2 está involucrado en ese envío, pero ya conoce la dirección MAC de PC-A. Va a actualizarse con la dirección de PC-B cuando éste responda.
+
 ### iv. B responde esta solicitud ARP.
+
+#### Switch 1
+| MAC | Puerto |
+| --- | ------ |
+| MAC_PC-A | e0 |
+| MAC_PC-C | e1 |
+
+#### Switch 2
+| MAC | Puerto |
+| --- | ------ |
+| MAC_PC-A | e0 |
+| MAC_PC-C | e7 |
+| MAC_PC-B | e1 |
 
 ## d. Si la PC E y la PC D hubiesen estado ejecutando un tcpdump para escuchar todo lo que pasa por su interfaz de red, ¿cuáles de los requerimientos/respuestas anteriores hubiesen escuchado cada una?
 
-🦺
+Las solicitudes ARP se realizan siempre al Broadcast de la red, por lo que todos los dispositivos van a poder verlas. Las respuestas dependen del dispositivo de red al que estén conectados.
+
+#### PC-D hubiese escuchado:
+* Solicitud ARP desde PC-A hacia PC-C.
+* Respuesta ARP desde PC-C hacia PC-A.
+* Solicitud ARP desde PC-B hacia PC-A.
+
+No escucha la respuesta de PC-B hacia PC-A porque estos 2 dispositivos están conectados a un Switch, que divide al dominio de colisión en el que está PC-D.
+
+#### PC-E hubiese escuchado:
+* Solicitud ARP desde PC-A hacia PC-C.
+* Solicitud ARP desde PC-B hacia PC-A.
+
+No escucha ninguna de las respuestas porque está conectado a un Switch, que retransmite los mensajes directamente a la dirección destino (y no hay ninguna respuesta hacia esta PC).
 
 ## e. Si se reemplaza a switch1 por un router, ¿cuántos dominios de colisión y de broadcast quedarían?
 

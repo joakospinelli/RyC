@@ -295,23 +295,38 @@ Como no todas las subredes libres quedaron consecutivas, tengo que dividir en va
 
 ## a. La red A tiene 125 hosts y se espera un crecimiento máximo de 20 hosts.
 
-
-
 ## b. La red X tiene 63 hosts.
-
-
 
 ## c. La red B cuenta con 60 hosts
 
-
-
 ## d. La red Y tiene 46 hosts y se espera un crecimiento máximo de 18 hosts.
-
-
 
 ## e. En cada red, se debe desperciciar la menor cantidad de direcciones IP posibles. En este sentido, las redes utilizadas para conectar los routers deberán utilizar segmentos de red /30 de modo de desperdiciar la menor cantidad posible de direcciones IP
 
+#### Redes
+| Red | Host máximos | Máscara | Subred asignada |
+| --- | ------------ | ------- | --------------- |
+| A | 145 | /24 | 200.100.8.0 |
+| X | 63 | /25 | 200.100.9.0.0 |
+| Y | 64 | /25 | 200.100.9.128 |
+| B | 60 | /26 | 200.100.10.0/26 |
+
+#### Conexiones
+| Red | Máscara | Subred asignada |
+| --- | ------- | --------------- |
+| N1-N2 | /30 | 200.100.10.64 |
+| N1-N3 | /30 | 200.100.10.68 |
+| N1-N4 | /30 | 200.100.10.72 |
+| N2-N4 | /30 | 200.100.10.76 |
+| N3-N4 | /30 | 200.100.10.80 |
+
+### Redes libres
+* `200.100.11.0/24`
+* Muchas `/30` que no voy a anotar todas
+
 # 18) Asigne direcciones IP en los equipos de la topología según el plan anterior.
+
+<img src="./screenshots/Practica 7/ej18.png">
 
 # 19) Describa qué es y para qué sirve el protocolo ICMP.
 
